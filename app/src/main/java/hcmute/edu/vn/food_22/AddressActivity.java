@@ -2,9 +2,18 @@ package hcmute.edu.vn.food_22;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.CalendarContract;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -13,17 +22,53 @@ import static android.R.layout.simple_list_item_1;
 public class AddressActivity extends AppCompatActivity {
 
     ListView listView;
+    private static final int RESULT_CODE = 123;
     private ArrayList<String> arrayList;
     private ArrayAdapter arrayAdapter;
+    private String tinh;
+    private TextView txtOK, txtCancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
 
+        Intent intent = getIntent();
+        tinh = intent.getStringExtra("Tinh");
+
         listView = (ListView) findViewById(R.id.lstTinh);
+        txtOK = (TextView) findViewById(R.id.txtOk);
+        txtCancel = (TextView) findViewById(R.id.txtCancel);
+
         SetupArrayAdapter();
+        ChangeText(tinh);
         listView.setAdapter(arrayAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SetupArrayAdapter();
+                ChangeText(arrayList.get(position));
+                listView.setAdapter(arrayAdapter);
+                listView.setSelection(position);
+                tinh = arrayList.get(position);
+            }
+        });
+
+        txtOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendToHome(RESULT_CODE);
+            }
+        });
+
+        txtCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendToHome(RESULT_CODE);
+            }
+        });
+
     }
 
     private void SetupArrayAdapter(){
@@ -90,8 +135,37 @@ public class AddressActivity extends AppCompatActivity {
         arrayList.add("Đà Nẵng");
         arrayList.add("Hải Phòng");
         arrayList.add("Hà Nội");
-        arrayList.add("TP Hồ Chí Minh");
-        arrayAdapter = new ArrayAdapter<String>(AddressActivity.this, simple_list_item_1 ,arrayList);
+        arrayList.add("TP. Hồ Chí Minh");
+    }
+
+    private void ChangeText(final String temp){
+        arrayAdapter = new ArrayAdapter<String>(AddressActivity.this, simple_list_item_1 ,arrayList){
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent){
+                // Get the Item from ListView
+                View view = super.getView(position, convertView, parent);
+
+                // Initialize a TextView for ListView each Item
+                TextView tv = (TextView) view.findViewById(android.R.id.text1);
+
+                // Set the text color of TextView (ListView Item)
+                if (tv.getText().equals(temp))
+                    tv.setTextColor(Color.GREEN);
+                else
+                    tv.setTextColor(Color.BLACK);
+
+                // Generate ListView Item using TextView
+                return view;
+            }
+        };
+    }
+
+    public void sendToHome(int resultcode)
+    {
+        Intent intent=getIntent();
+        intent.putExtra("Tinh", tinh);
+        setResult(resultcode, intent);
+        finish();
     }
 
 }
