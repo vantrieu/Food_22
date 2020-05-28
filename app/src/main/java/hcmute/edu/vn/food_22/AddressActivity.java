@@ -42,7 +42,7 @@ public class AddressActivity extends AppCompatActivity {
         setContentView(R.layout.activity_address);
 
         Intent intent = getIntent();
-        tinh = intent.getStringExtra("Tinh");
+        temp = tinh = intent.getStringExtra("Tinh");
 
         lvCustomListView = (ListView) findViewById(R.id.lvCustomListView);
 
@@ -64,7 +64,11 @@ public class AddressActivity extends AppCompatActivity {
         txtOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendToHome(RESULT_CODE, temp);
+                if(temp.equals(tinh)) {
+                    sendToHome(RESULT_CODE, tinh);
+                }else{
+                    sendToHome(RESULT_CODE, temp);
+                }
             }
         });
 

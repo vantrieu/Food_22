@@ -17,7 +17,7 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private Button btnAddress;
+    private TextView txtAddress;
     private static final int REQUEST_CODE = 123;
     List<Store> lstStore;
     RecyclerView list_store_recyclerview;
@@ -27,15 +27,15 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        btnAddress = (Button) findViewById(R.id.btnTinh);
+        txtAddress = (TextView) findViewById(R.id.txtTinh);
         list_store_recyclerview = (RecyclerView) findViewById(R.id.recyclerview_store);
 
-        btnAddress.setOnClickListener(new View.OnClickListener() {
+        txtAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, AddressActivity.class);
                 //startActivity(intent);
-                intent.putExtra("Tinh", btnAddress.getText());
+                intent.putExtra("Tinh", txtAddress.getText());
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
@@ -50,7 +50,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==REQUEST_CODE){
-            btnAddress.setText(data.getStringExtra("Tinh"));
+            txtAddress.setText(data.getStringExtra("Tinh"));
         }
     }
 
