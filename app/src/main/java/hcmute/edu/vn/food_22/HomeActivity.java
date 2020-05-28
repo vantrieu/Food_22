@@ -8,8 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.location.Address;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -21,6 +25,7 @@ public class HomeActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 123;
     List<Store> lstStore;
     RecyclerView list_store_recyclerview;
+    EditText edt_address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         txtAddress = (TextView) findViewById(R.id.txtTinh);
+        edt_address=findViewById(R.id.editText);
         list_store_recyclerview = (RecyclerView) findViewById(R.id.recyclerview_store);
 
         txtAddress.setOnClickListener(new View.OnClickListener() {
@@ -37,6 +43,22 @@ public class HomeActivity extends AppCompatActivity {
                 //startActivity(intent);
                 intent.putExtra("Tinh", txtAddress.getText());
                 startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
+
+        edt_address.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
+                {
+                    // After enter content to edittext box, click ok to start new Activity
+                    Intent i = new Intent(HomeActivity.this, ShowKQTimKiem.class);
+                    i.putExtra("key",edt_address.getText().toString().trim());
+                    i.putExtra("tvtinh",txtAddress.getText().toString().trim());
+                    startActivity(i);
+                    return true;
+                }
+                return false;
             }
         });
 
