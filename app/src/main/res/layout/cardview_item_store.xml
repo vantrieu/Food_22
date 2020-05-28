@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    android:layout_width="180dp"
+    android:layout_height="280dp"
+    android:layout_margin="5dp"
+    cardview:cardCornerRadius="4dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        
+        <ImageView
+            android:id="@+id/img_store_avatar"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/txt_name_store"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text string"
+            android:textStyle="bold"
+            android:gravity="left"/>
+
+        <TextView
+            android:id="@+id/txt_description_store"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="thu nghiem ve mo ta hoac danh gia quan an mot cach cong bang"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
