@@ -11,15 +11,17 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 
 public class CustomAdapter extends BaseAdapter {
 
-    String[] result;
+    ArrayList<String> result;
     Context context;
     int imageId;
     String tinh;
 
-    public CustomAdapter(Context context, String[] result, int imageId, String tinh) {
+    public CustomAdapter(Context context, ArrayList<String> result, int imageId, String tinh) {
         this.context = context;
         this.result = result;
         this.imageId = imageId;
@@ -29,7 +31,7 @@ public class CustomAdapter extends BaseAdapter {
     //Trả về độ dài của mảng chứa nội dung list item
     @Override
     public int getCount() {
-        return result.length;
+        return result.size();
     }
 
     //Trả về vị trí của mảng chứa nội dung list item
@@ -53,13 +55,13 @@ public class CustomAdapter extends BaseAdapter {
         final ImageView imgAvatar = (ImageView) rowView.findViewById(R.id.imgCheck);
 
 
-        if(result[position].equals(tinh)) {
-            tvNoiDung.setText(result[position]);
+        if(result.get(position).equals(tinh)) {
+            tvNoiDung.setText(result.get(position));
             tvNoiDung.setTextColor(0xFF03A9F4);
             //imgAvatar.setImageResource(imageId);
             Picasso.with(context).load(imageId).into(imgAvatar);
         } else {
-            tvNoiDung.setText(result[position]);
+            tvNoiDung.setText(result.get(position));
             tvNoiDung.setTextColor(Color.BLACK);
         }
 
