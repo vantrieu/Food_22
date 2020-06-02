@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 public class CustomAdapter extends BaseAdapter {
 
     String[] result;
@@ -49,10 +51,12 @@ public class CustomAdapter extends BaseAdapter {
         final TextView tvNoiDung = (TextView) rowView.findViewById(R.id.tvNoiDung);
         final ImageView imgAvatar = (ImageView) rowView.findViewById(R.id.imgCheck);
 
+
         if(result[position].equals(tinh)) {
             tvNoiDung.setText(result[position]);
-            tvNoiDung.setTextColor(Color.GREEN);
-            imgAvatar.setImageResource(imageId);
+            tvNoiDung.setTextColor(0xFF03A9F4);
+            //imgAvatar.setImageResource(imageId);
+            Glide.with(context).load(imageId).into(imgAvatar);
         } else {
             tvNoiDung.setText(result[position]);
             tvNoiDung.setTextColor(Color.BLACK);

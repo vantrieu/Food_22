@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 
 public class ShowKQTimKiem extends AppCompatActivity {
 
+    LinearLayout ln2;
     EditText edt_find;
     TextView txt_tinh;
     ImageView img_back;
@@ -46,6 +48,8 @@ public class ShowKQTimKiem extends AppCompatActivity {
                 finish();
             }
         });
+
+
     }
 
     private void anhXa()
@@ -54,6 +58,7 @@ public class ShowKQTimKiem extends AppCompatActivity {
         txt_tinh=findViewById(R.id.txtTinh);
         listView=findViewById(R.id.listView_id);
         img_back=findViewById(R.id.img_back);
+        ln2 =findViewById(R.id.linearLayout2);
     }
 
     private void loadDATA()

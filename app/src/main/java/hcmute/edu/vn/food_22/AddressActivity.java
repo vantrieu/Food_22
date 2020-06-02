@@ -3,24 +3,11 @@ package hcmute.edu.vn.food_22;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.CalendarContract;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-
-import static android.R.layout.simple_list_item_1;
 
 public class AddressActivity extends AppCompatActivity {
 
@@ -28,7 +15,7 @@ public class AddressActivity extends AppCompatActivity {
     private static final int RESULT_CODE = 123;
     private String tinh, temp;
     private TextView txtOK, txtCancel;
-    public static int imgAvatar = R.drawable.tick;
+    public static int imgAvatar = R.drawable.bluee_tick;
     ListView lvCustomListView;
     public static String[] tvNoiDung = {"An Giang","Bà Rịa – Vũng Tàu","Bắc Giang","Bắc Kạn","Bạc Liêu","Bắc Ninh","Bến Tre","Bình Định","Bình Dương","Bình Phước","Bình Thuận","Cà Mau",
             "Cần Thơ","Cao Bằng","Đà Nẵng","Đắk Lắk","Đắk Nông","Điện Biên","Đồng Nai","Đồng Tháp","Gia Lai","Hà Giang","Hà Nam","Hà Nội","Hà Tĩnh","Hải Dương","Hải Phòng","Hậu Giang",
