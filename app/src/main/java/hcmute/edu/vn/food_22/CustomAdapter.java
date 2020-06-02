@@ -9,7 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
+
 
 public class CustomAdapter extends BaseAdapter {
 
@@ -56,7 +57,7 @@ public class CustomAdapter extends BaseAdapter {
             tvNoiDung.setText(result[position]);
             tvNoiDung.setTextColor(0xFF03A9F4);
             //imgAvatar.setImageResource(imageId);
-            Glide.with(context).load(imageId).into(imgAvatar);
+            Picasso.with(context).load(imageId).into(imgAvatar);
         } else {
             tvNoiDung.setText(result[position]);
             tvNoiDung.setTextColor(Color.BLACK);
