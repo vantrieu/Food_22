@@ -19,5 +19,29 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        database = new Database(this, "foody.db", null, 1);
+        txtVersion = (TextView) findViewById(R.id.textViewVersion);
+
+        //Tạo các bảng và chèn dữ liệu
+        database.CreateTableProvince();
+        database.CreateTableRestaurant();
+
+        try {
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            txtVersion.setText("Phiên bản: " + packageInfo.versionName);
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                }
+            }, 3000);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 }
