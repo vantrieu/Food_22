@@ -58,8 +58,8 @@ public class CustomAdapter extends BaseAdapter {
         if(result.get(position).equals(tinh)) {
             tvNoiDung.setText(result.get(position));
             tvNoiDung.setTextColor(0xFF03A9F4);
-            //imgAvatar.setImageResource(imageId);
-            Picasso.with(context).load(imageId).into(imgAvatar);
+            imgAvatar.setImageResource(imageId);
+            //Picasso.with(context).load(imageId).into(imgAvatar);
         } else {
             tvNoiDung.setText(result.get(position));
             tvNoiDung.setTextColor(Color.BLACK);
