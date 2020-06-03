@@ -1,13 +1,17 @@
 package hcmute.edu.vn.food_22;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -18,6 +22,7 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
 
     private Context mContext;
     private List<Store> mData;
+    private Database db = new Database(mContext, "foody.db", null, 1);
 
     public RecyclerviewAdapter(Context context, List<Store> mData) {
         this.mContext = context;
@@ -34,7 +39,7 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
         holder.tv_name_store.setText(mData.get(position).getRes_name());
         holder.tv_description_store.setText(mData.get(position).getDescription());
@@ -42,6 +47,14 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
         String urlTemp = mData.get(position).getUrl();
         Picasso.with(mContext).load(urlTemp).into(holder.img_store);
         //Glide.with(mContext).load(urlTemp).into(holder.img_store);
+        holder.cardview_res.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, RestaurantDetailActivity.class);
+                intent.putExtra("res_id",mData.get(position).getRes_id());
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -53,6 +66,7 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
 
         TextView tv_name_store, tv_description_store;
         ImageView img_store;
+        CardView cardview_res;
 
 
         public MyViewHolder(@NonNull View itemView) {
@@ -61,6 +75,7 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
             tv_name_store = (TextView) itemView.findViewById(R.id.txt_name_store);
             tv_description_store = (TextView) itemView.findViewById((R.id.txt_description_store));
             img_store = (ImageView) itemView.findViewById(R.id.img_store_avatar);
+            cardview_res = (CardView) itemView.findViewById(R.id.cardview_res);
 
         }
     }

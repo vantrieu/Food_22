@@ -65,9 +65,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         SetupListStore();
-        RecyclerviewAdapter myAdapter = new RecyclerviewAdapter(this, lstStore);
-        list_store_recyclerview.setLayoutManager(new GridLayoutManager(this, 2));
-        list_store_recyclerview.setAdapter(myAdapter);
+
     }
 
     @Override
@@ -76,23 +74,22 @@ public class HomeActivity extends AppCompatActivity {
         if(requestCode==REQUEST_CODE){
             txtAddress.setText(data.getStringExtra("Tinh"));
         }
+        SetupListStore();
     }
 
     private void SetupListStore(){
         lstStore = new ArrayList<>();
         Database database = new Database(this, "foody.db", null, 1);
-        Cursor dataRestaurant = database.GetData("SELECT * FROM Restaurant");
-        //Cursor data = database.GetData("SELECT * FROM Province WHERE province_name LIKE '"+ txtAddress.getText() +"%'");
-        /*String temp = "";
-        while (data.moveToNext()) {
-            temp = temp + data.getString(1);
-        }
-        Toast.makeText(this, temp, Toast.LENGTH_SHORT).show();*/
+        Cursor dataFlag = database.GetData("SELECT * FROM Province WHERE name = '" + txtAddress.getText() + "'");
+        dataFlag.moveToFirst();
+        Cursor dataRestaurant = database.GetData("SELECT * FROM Restaurant WHERE province_id = " + dataFlag.getInt(0));
         while (dataRestaurant.moveToNext()) {
             lstStore.add( new Store(dataRestaurant.getInt(0), dataRestaurant.getString(1),  dataRestaurant.getString(2),dataRestaurant.getString(3),
                     dataRestaurant.getString(4), dataRestaurant.getString(5), dataRestaurant.getString(6), dataRestaurant.getString(7),
-                    dataRestaurant.getInt(8), dataRestaurant.getInt(9), dataRestaurant.getInt(10), dataRestaurant.getInt(11)));
+                    dataRestaurant.getInt(8), dataRestaurant.getInt(9), dataRestaurant.getInt(10)));
         }
-
+        RecyclerviewAdapter myAdapter = new RecyclerviewAdapter(this, lstStore);
+        list_store_recyclerview.setLayoutManager(new GridLayoutManager(this, 2));
+        list_store_recyclerview.setAdapter(myAdapter);
     }
 }

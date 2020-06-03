@@ -9,10 +9,10 @@ public class Store {
     private String url;
     private String res_open;
     private String res_close;
-    private int province_id, has_wifi, has_delivery, has_free_park;
+    private int province_id, has_wifi, has_delivery;
 
     public Store(int res_id, String res_name, String tes_type, String res_address, String description, String url, String res_open, String res_close, int province_id,
-                 int has_wifi, int has_delivery, int has_free_park) {
+                 int has_wifi, int has_delivery) {
         this.res_id = res_id;
         this.res_name = res_name;
         this.tes_type = tes_type;
@@ -24,7 +24,6 @@ public class Store {
         this.province_id = province_id;
         this.has_wifi = has_wifi;
         this.has_delivery = has_delivery;
-        this.has_free_park = has_free_park;
     }
 
     public int getRes_id() {
@@ -113,13 +112,5 @@ public class Store {
 
     public void setHas_delivery(int has_delivery) {
         this.has_delivery = has_delivery;
-    }
-
-    public int getHas_free_park() {
-        return has_free_park;
-    }
-
-    public void setHas_free_park(int has_free_park) {
-        this.has_free_park = has_free_park;
     }
 }
