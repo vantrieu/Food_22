@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
-    android:layout_height="200dp"
+    android:layout_height="210dp"
     android:layout_weight="1"
     android:layout_margin="5dp"
     cardview:cardCornerRadius="4dp"
@@ -24,15 +24,23 @@
             android:id="@+id/txt_name_store"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:gravity="left"
             android:text="Text string"
-            android:textStyle="bold"
-            android:gravity="left"/>
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txt_description_store"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="thu nghiem ve mo ta hoac danh gia quan an mot cach cong bang"/>
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:lines="2"
+            android:maxLines="2"
+            android:text="thu nghiem ve mo ta hoac danh gia quan an mot cach cong bang"
+            android:textColor="#000000" />
 
     </LinearLayout>
 

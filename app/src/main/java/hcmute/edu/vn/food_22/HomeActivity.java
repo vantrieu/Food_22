@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.location.Address;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,21 +80,19 @@ public class HomeActivity extends AppCompatActivity {
 
     private void SetupListStore(){
         lstStore = new ArrayList<>();
-        lstStore.add( new Store("https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg",
-                "Bún đậu Cô Ba", "Nhân viên thân thiện, làm hơi lâu nhưng đồ ăn ngon!"));
-        lstStore.add( new Store("https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg",
-                "Bún đậu Cô Ba", "Nhân viên thân thiện, làm hơi lâu nhưng đồ ăn ngon!"));
-        lstStore.add( new Store("https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg",
-                "Bún đậu Cô Ba", "Nhân viên thân thiện, làm hơi lâu nhưng đồ ăn ngon!"));
-        lstStore.add( new Store("https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg",
-                "Bún đậu Cô Ba", "Nhân viên thân thiện, làm hơi lâu nhưng đồ ăn ngon!"));
-        lstStore.add( new Store("https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg",
-                "Bún đậu Cô Ba", "Nhân viên thân thiện, làm hơi lâu nhưng đồ ăn ngon!"));
-        lstStore.add( new Store("https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg",
-                "Bún đậu Cô Ba", "Nhân viên thân thiện, làm hơi lâu nhưng đồ ăn ngon!"));
-        lstStore.add( new Store("https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg",
-                "Bún đậu Cô Ba", "Nhân viên thân thiện, làm hơi lâu nhưng đồ ăn ngon!"));
-        lstStore.add( new Store("https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg",
-                "Bún đậu Cô Ba", "Nhân viên thân thiện, làm hơi lâu nhưng đồ ăn ngon!"));
+        Database database = new Database(this, "foody.db", null, 1);
+        Cursor dataRestaurant = database.GetData("SELECT * FROM Restaurant");
+        //Cursor data = database.GetData("SELECT * FROM Province WHERE province_name LIKE '"+ txtAddress.getText() +"%'");
+        /*String temp = "";
+        while (data.moveToNext()) {
+            temp = temp + data.getString(1);
+        }
+        Toast.makeText(this, temp, Toast.LENGTH_SHORT).show();*/
+        while (dataRestaurant.moveToNext()) {
+            lstStore.add( new Store(dataRestaurant.getInt(0), dataRestaurant.getString(1),  dataRestaurant.getString(2),dataRestaurant.getString(3),
+                    dataRestaurant.getString(4), dataRestaurant.getString(5), dataRestaurant.getString(6), dataRestaurant.getString(7),
+                    dataRestaurant.getInt(8), dataRestaurant.getInt(9), dataRestaurant.getInt(10), dataRestaurant.getInt(11)));
+        }
+
     }
 }

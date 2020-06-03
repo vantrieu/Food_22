@@ -61,12 +61,31 @@ public class Database extends SQLiteOpenHelper {
     //Tao bang Restaurant va chen cac du lieu
     public void CreateTableRestaurant(){
         String sql = "CREATE TABLE IF NOT EXISTS Restaurant(res_id INTEGER PRIMARY KEY AUTOINCREMENT, res_name VARCHAR(254), res_type VARCHAR(254), res_address TEXT, " +
-                "res_img TEXT, res_open VARCHAR(254), res_close VARCHAR(254), province_id INTEGER, has_wifi TINYINT, has_delivery TINYINT, has_free_parking TINYINT," +
-                " FOREIGN KEY (province_id) REFERENCES Province(province_id))";
+                "description VARCHAR(254), res_img TEXT, res_open VARCHAR(254), res_close VARCHAR(254), province_id INTEGER, has_wifi BIT, has_delivery BIT, " +
+                "has_free_parking BIT,FOREIGN KEY (province_id) REFERENCES Province(province_id))";
         QueryData(sql);
         Cursor dataRes = GetData("SELECT * FROM Restaurant");
         if(dataRes.getCount() == 0) {
-
+            QueryData("INSERT INTO Restaurant VALUES(null, 'Xôi A Hổ', 'Quán ăn', '25/123 Phan Trung, KP. 2, P. Tân Mai, Tp. Biên Hòa, Đồng Nai', " +
+                    "'Có người mới đặt giao hàng tận nơi.', 'https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg', '07:00', '21:00', 19, 1, 1, 1)");
+            QueryData("INSERT INTO Restaurant VALUES(null, 'Ăn vặt Shin 2', 'Quán ăn', '18 Dương Tử Giang, Tp. Biên Hòa, Đồng Nai', " +
+                    "'Có người mới đặt giao hàng tận nơi.', 'https://deloy.tech/dongnai/anvatshin2/laubanhgao.jpg', '10:00', '23:00', 19, 1, 1, 1)");
+            QueryData("INSERT INTO Restaurant VALUES(null, 'Bánh mì 3 Phi', 'Quán ăn', '55 Phan Đình Phùng, P. Trung Dũng, Tp. Biên Hòa, Đồng Nai', " +
+                    "'Có người mới đặt giao hàng tận nơi.', 'https://deloy.tech/dongnai/banhmi3phi/banhminuongmuoiot.jpg', '07:00', '22:30', 19, 1, 1, 1)");
+            QueryData("INSERT INTO Restaurant VALUES(null, 'Dương Ký 4', 'Quán ăn', '42A Dương Tử Giang, P. Tân Tiến, Tp. Biên Hòa, Đồng Nai', " +
+                    "'Có người mới đặt giao hàng tận nơi.', 'https://deloy.tech/dongnai/duongky4/combochaytoi.jpg', '07:00', '22:00', 19, 1, 1, 1)");
+            QueryData("INSERT INTO Restaurant VALUES(null, 'Gà nướng Khang', 'Quán nhậu', '59/293 Phạm Văn Thuận, P. Tân Mai,  Tp. Biên Hòa, Đồng Nai', " +
+                    "'Có người mới đặt giao hàng tận nơi.', 'https://deloy.tech/dongnai/ganuongkhang/ganuonglu.jpg', '16:00', '23:30', 19, 1, 1, 1)");
+            QueryData("INSERT INTO Restaurant VALUES(null, 'New Days Biên Hòa', 'Quán nước', '71 Phan Trung, P. Tân Mai,  Tp. Biên Hòa, Đồng Nai', " +
+                    "'Có người mới đặt giao hàng tận nơi.', 'https://deloy.tech/dongnai/newdaysbienhoa/matcha.jpg', '08:30', '22:00', 19, 1, 1, 1)");
+            QueryData("INSERT INTO Restaurant VALUES(null, 'Phở trộn Hà Nội', 'Quán ăn', '170 Phan Trung, KP. 2, P. Tân Tiến,  Tp. Biên Hòa, Đồng Nai', " +
+                    "'Có người mới đặt giao hàng tận nơi.', 'https://deloy.tech/dongnai/photronhanoi/phtronbolon.jpg', '06:00', '11:00', 19, 1, 1, 1)");
+            QueryData("INSERT INTO Restaurant VALUES(null, 'Phúc Long', 'Quán nước', '217 Võ Thị Sáu, P. Thống Nhất,  Tp. Biên Hòa, Đồng Nai', " +
+                    "'Có người mới đặt giao hàng tận nơi.', 'https://deloy.tech/dongnai/phuclong/suatuoitranchauduongden.jpg', '07:00', '22:00', 19, 1, 1, 1)");
+            QueryData("INSERT INTO Restaurant VALUES(null, 'Toocha', 'Quán nước', '1277 Phạm Văn Thuận, P. Thống Nhất,  Tp. Biên Hòa, Đồng Nai', " +
+                    "'Có người mới đặt giao hàng tận nơi.', 'https://deloy.tech/dongnai/toocha/trasuakhongmap.jpg', '09:00', '22:00', 19, 1, 1, 1)");
+            QueryData("INSERT INTO Restaurant VALUES(null, 'Xôi gà Bảo Yến', 'Quán ăn', '20/11 Võ Thị Sáu, P. Quyết Thắng,  Tp. Biên Hòa, Đồng Nai', " +
+                    "'Có người mới đặt giao hàng tận nơi.', 'https://deloy.tech/dongnai/xoigabaoyen/tomrim.jpg', '11:00', '20:00', 19, 1, 1, 1)");
         }
     }
 

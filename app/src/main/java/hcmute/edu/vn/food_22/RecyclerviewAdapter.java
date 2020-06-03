@@ -36,7 +36,7 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        holder.tv_name_store.setText(mData.get(position).getName());
+        holder.tv_name_store.setText(mData.get(position).getRes_name());
         holder.tv_description_store.setText(mData.get(position).getDescription());
 
         String urlTemp = mData.get(position).getUrl();
