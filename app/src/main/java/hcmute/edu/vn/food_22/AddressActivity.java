@@ -115,7 +115,8 @@ public class AddressActivity extends AppCompatActivity {
 
     public void sendToHome(int resultcode, String flag)
     {
-        Intent intent=getIntent();
+        //Intent intent=getIntent();
+        Intent intent=new Intent(AddressActivity.this, HomeActivity.class);
         intent.putExtra("Tinh", flag);
         setResult(resultcode, intent);
         finish();
@@ -128,4 +129,12 @@ public class AddressActivity extends AppCompatActivity {
         }
     }
 
+    //khi không chọn tỉnh nào, ấn back để quay lại. ứng dụng bị dừng đột ngột (Fix sau)
+    @Override
+    protected void onDestroy() {
+        Intent intent = getIntent();
+        tinh = intent.getStringExtra("Tinh");
+        sendToHome(RESULT_CODE, tinh);
+        super.onDestroy();
+    }
 }
