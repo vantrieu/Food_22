@@ -95,7 +95,10 @@ public class Database extends SQLiteOpenHelper {
         QueryData(sql);
         Cursor dataType = GetData("SELECT * FROM Type_Food");
         if(dataType.getCount() == 0) {
-
+            QueryData("INSERT INTO Type_Food VALUES (null, 'Xôi')");
+            QueryData("INSERT INTO Type_Food VALUES (null, 'Mì')");
+            QueryData("INSERT INTO Type_Food VALUES (null, 'Cơm')");
+            QueryData("INSERT INTO Type_Food VALUES (null, 'Nước')");
         }
     }
 
@@ -105,9 +108,10 @@ public class Database extends SQLiteOpenHelper {
                 "description VARCHAR(254), food_img TEXT, price bigint, res_id INTEGER, FOREIGN KEY (res_id) REFERENCES Restaurant(res_id), " +
                 "FOREIGN KEY (type_id) REFERENCES Type_Food(type_id))";
         QueryData(sql);
-        Cursor dataFood = GetData("SELECT * FROM Type_Food");
+        Cursor dataFood = GetData("SELECT * FROM Food");
         if(dataFood.getCount() == 0) {
-
+            QueryData("INSERT INTO Food VALUES(null, 'Xôi nếp cẩm', 1, 'Xôi này cũng tạm', 'https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg', 15000, 1)");
+            QueryData("INSERT INTO Food VALUES(null, 'Cơm gà xối mỡ', 3, 'Đùi gà to, nước sốt có khả năng gây nghiện', 'https://deloy.tech/dongnai/duongky4/combochaytoi.jpg', 25000, 4)");
         }
     }
 
@@ -116,7 +120,7 @@ public class Database extends SQLiteOpenHelper {
         String sql = "CREATE TABLE IF NOT EXISTS Wifi(wifi_id INTEGER PRIMARY KEY AUTOINCREMENT, wifi_name VARCHAR(254), wifi_pass VARCHAR(254)," +
                 "res_id INTEGER, FOREIGN KEY (res_id) REFERENCES Restaurant(res_id))";
         QueryData(sql);
-        Cursor dataWifi = GetData("SELECT * FROM Type_Food");
+        Cursor dataWifi = GetData("SELECT * FROM Wifi");
         if(dataWifi.getCount() == 0) {
 
         }
