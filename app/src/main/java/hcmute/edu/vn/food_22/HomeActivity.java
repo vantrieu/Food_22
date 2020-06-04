@@ -59,6 +59,8 @@ public class HomeActivity extends AppCompatActivity {
                     Intent i = new Intent(HomeActivity.this, ShowKQTimKiem.class);
                     i.putExtra("key",edt_address.getText().toString().trim());
                     i.putExtra("province_id", province_id);
+                    i.putExtra("province_name",txtAddress.getText()); //phải có province_id khi chương trình chạy, lúc chưa chọn tỉnh
+                    i.putExtra("input",edt_address.getText().toString().trim());
                     startActivity(i);
                     return true;
                 }
@@ -74,7 +76,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==REQUEST_CODE){
             province_id = data.getIntExtra("province_id", 0);
-            txtAddress.setText(GetProvinceName());
+            txtAddress.setText(GetProvinceName(province_id));
         }
         SetupListStore();
     }
@@ -100,7 +102,7 @@ public class HomeActivity extends AppCompatActivity {
         return dataFlag.getInt(0);
     }
 
-    private String GetProvinceName(){
+    private String GetProvinceName(int province_id){
         Cursor dataFlag = database.GetData("SELECT * FROM Province WHERE province_id = " + province_id);
         dataFlag.moveToFirst();
         return dataFlag.getString(1);
