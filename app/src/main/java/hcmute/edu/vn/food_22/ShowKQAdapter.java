@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class ShowKQAdapter extends BaseAdapter {
@@ -68,7 +70,7 @@ public class ShowKQAdapter extends BaseAdapter {
         holder.diaChi.setText(infoQuan.getDiaChi());
         holder.khoangCach.setText(String.valueOf(infoQuan.getKhoangCach())+" km");
         holder.loaiHinh.setText(infoQuan.getLoaiHinh());
-        holder.img_info.setImageResource(infoQuan.getThumbnail());
+        Picasso.with(context).load(infoQuan.getThumbnail()).into(holder.img_info);
         return convertView;
     }
 
