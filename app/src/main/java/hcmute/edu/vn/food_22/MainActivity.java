@@ -26,9 +26,6 @@ public class MainActivity extends AppCompatActivity {
         //Tạo các bảng và chèn dữ liệu
         database.CreateTableProvince();
         database.CreateTableRestaurant();
-        database.CreateTableTypeFood();
-        database.CreateTableFood();
-
 
         try {
             PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
