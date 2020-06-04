@@ -30,6 +30,7 @@ public class AddressActivity extends AppCompatActivity {
     ListView lvCustomListView;
     public ArrayList<String> tvNoiDung = new ArrayList<>();
     private Database database = new Database(this, "foody.db", null, 1);
+    private int province_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,8 @@ public class AddressActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        temp = tinh = intent.getStringExtra("Tinh");
+        province_id = intent.getIntExtra("province_id", 0);
+        temp = tinh = GetProvinceName();
 
         lvCustomListView = (ListView) findViewById(R.id.lvCustomListView);
 
@@ -117,7 +119,8 @@ public class AddressActivity extends AppCompatActivity {
     {
         //Intent intent=getIntent();
         Intent intent=new Intent(AddressActivity.this, HomeActivity.class);
-        intent.putExtra("Tinh", flag);
+        province_id = GetProvinceId(flag);
+        intent.putExtra("province_id", province_id);
         setResult(resultcode, intent);
         finish();
     }
@@ -132,9 +135,21 @@ public class AddressActivity extends AppCompatActivity {
     //khi không chọn tỉnh nào, ấn back để quay lại. ứng dụng bị dừng đột ngột (Fix sau)
     @Override
     protected void onDestroy() {
-        Intent intent = getIntent();
+        /*Intent intent = getIntent();
         tinh = intent.getStringExtra("Tinh");
-        sendToHome(RESULT_CODE, tinh);
+        sendToHome(RESULT_CODE, tinh);*/
         super.onDestroy();
+    }
+
+    private String GetProvinceName(){
+        Cursor dataFlag = database.GetData("SELECT * FROM Province WHERE province_id = " + province_id);
+        dataFlag.moveToFirst();
+        return dataFlag.getString(1);
+    }
+
+    private int GetProvinceId(String flag){
+        Cursor dataFlag = database.GetData("SELECT * FROM Province WHERE name = '" + flag + "'");
+        dataFlag.moveToFirst();
+        return dataFlag.getInt(0);
     }
 }
