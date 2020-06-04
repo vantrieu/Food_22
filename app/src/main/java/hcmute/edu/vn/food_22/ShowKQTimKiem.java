@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -53,10 +54,15 @@ public class ShowKQTimKiem extends AppCompatActivity {
                 finish();
             }
         });
-        edt_find.setOnClickListener(new View.OnClickListener() {
+        edt_find.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public void onClick(View v) {
-                
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
+                {
+                    load();
+                    return true;
+                }
+                return false;
             }
         });
     }
@@ -93,6 +99,26 @@ public class ShowKQTimKiem extends AppCompatActivity {
 
         adapter.notifyDataSetChanged();
     }
+    private void load()
+    {
+        arrayList.clear();
+        Cursor cursor=get_by_food(edt_find.getText().toString());
+        if(cursor.getCount()<1)
+        {
+            cursor=get_by_name(edt_find.getText().toString());
+            if(cursor.getCount()<1)
+            {
+                Toast.makeText(this, "Không tìm thấy quán ăn phù hợp", Toast.LENGTH_SHORT).show();
+            }
+        }
+        while (cursor.moveToNext())
+        {
+            Log.e("DATA",cursor.getString(1));
+            arrayList.add(new InfoQuan(cursor.getString(1),cursor.getString(3),0,cursor.getString(2),cursor.getString(4)));
+        }
+
+        adapter.notifyDataSetChanged();
+    }
 
     private Cursor get_all()
     {
@@ -109,10 +135,10 @@ public class ShowKQTimKiem extends AppCompatActivity {
         return cursor;
     }
 
-    private Cursor get_by_food(String food_name)
+    private Cursor get_by_food(String str)
     {
         Database dt=new Database(this, "foody.db", null, 1);
-        Cursor cursor=dt.GetData("SELECT Restaurant.res_id, res_name, res_type, res_address, res_img, province_id FROM Restaurant INNER JOIN Food ON Restaurant.res_id=Food.res_id WHERE food_name LIKE '%"+food_name+"%'");
+        Cursor cursor=dt.GetData("SELECT Restaurant.res_id, res_name, res_type, res_address, res_img, province_id FROM Restaurant LEFT JOIN Food ON Restaurant.res_id=Food.res_id WHERE (food_name LIKE '%"+str+"%' OR res_name LIKE '%"+str+"%')");
         return cursor;
     }
 }
