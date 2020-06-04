@@ -11,7 +11,6 @@ import android.location.Address;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +28,8 @@ public class HomeActivity extends AppCompatActivity {
     List<Store> lstStore;
     RecyclerView list_store_recyclerview;
     EditText edt_address;
+    int province_id;
+    Database database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +39,13 @@ public class HomeActivity extends AppCompatActivity {
         txtAddress = (TextView) findViewById(R.id.txtTinh);
         edt_address=findViewById(R.id.editText);
         list_store_recyclerview = (RecyclerView) findViewById(R.id.recyclerview_store);
+        database = new Database(this, "foody.db", null, 1);
 
         txtAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, AddressActivity.class);
-                //startActivity(intent);
-                intent.putExtra("Tinh", txtAddress.getText());
+                intent.putExtra("province_id", GetProvinceId());
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
@@ -57,8 +58,7 @@ public class HomeActivity extends AppCompatActivity {
                     // After enter content to edittext box, click ok to start new Activity
                     Intent i = new Intent(HomeActivity.this, ShowKQTimKiem.class);
                     i.putExtra("key",edt_address.getText().toString().trim());
-                    i.putExtra("tvtinh",txtAddress.getText().toString().trim());
-                    i.putExtra("input",edt_address.getText().toString().trim());
+                    i.putExtra("province_id", province_id);
                     startActivity(i);
                     return true;
                 }
@@ -67,21 +67,20 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         SetupListStore();
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==REQUEST_CODE){
-            txtAddress.setText(data.getStringExtra("Tinh"));
+            province_id = data.getIntExtra("province_id", 0);
+            txtAddress.setText(GetProvinceName());
         }
         SetupListStore();
     }
 
     private void SetupListStore(){
         lstStore = new ArrayList<>();
-        Database database = new Database(this, "foody.db", null, 1);
         Cursor dataFlag = database.GetData("SELECT * FROM Province WHERE name = '" + txtAddress.getText() + "'");
         dataFlag.moveToFirst();
         Cursor dataRestaurant = database.GetData("SELECT * FROM Restaurant WHERE province_id = " + dataFlag.getInt(0));
@@ -95,4 +94,15 @@ public class HomeActivity extends AppCompatActivity {
         list_store_recyclerview.setAdapter(myAdapter);
     }
 
+    private int GetProvinceId(){
+        Cursor dataFlag = database.GetData("SELECT * FROM Province WHERE name = '" + txtAddress.getText() + "'");
+        dataFlag.moveToFirst();
+        return dataFlag.getInt(0);
+    }
+
+    private String GetProvinceName(){
+        Cursor dataFlag = database.GetData("SELECT * FROM Province WHERE province_id = " + province_id);
+        dataFlag.moveToFirst();
+        return dataFlag.getString(1);
+    }
 }
