@@ -5,7 +5,7 @@ public class InfoQuan {
     private String diaChi;
     private double khoangCach;
     private String loaiHinh;
-    private int thumbnail;
+    private String thumbnail;
 
     public InfoQuan(String tenQuan, String diaChi, double khoangCach, String loaiHinh) {
         this.tenQuan = tenQuan;
@@ -14,7 +14,7 @@ public class InfoQuan {
         this.loaiHinh = loaiHinh;
     }
 
-    public InfoQuan(String tenQuan, String diaChi, double khoangCach, String loaiHinh, int thumbnail) {
+    public InfoQuan(String tenQuan, String diaChi, double khoangCach, String loaiHinh, String thumbnail) {
         this.tenQuan = tenQuan;
         this.diaChi = diaChi;
         this.khoangCach = khoangCach;
@@ -57,11 +57,11 @@ public class InfoQuan {
         this.loaiHinh = loaiHinh;
     }
 
-    public int getThumbnail() {
+    public String getThumbnail() {
         return thumbnail;
     }
 
-    public void setThumbnail(int thumbnail) {
+    public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
     }
 }

@@ -11,6 +11,7 @@ import android.location.Address;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -57,6 +58,7 @@ public class HomeActivity extends AppCompatActivity {
                     Intent i = new Intent(HomeActivity.this, ShowKQTimKiem.class);
                     i.putExtra("key",edt_address.getText().toString().trim());
                     i.putExtra("tvtinh",txtAddress.getText().toString().trim());
+                    i.putExtra("input",edt_address.getText().toString().trim());
                     startActivity(i);
                     return true;
                 }
@@ -92,4 +94,5 @@ public class HomeActivity extends AppCompatActivity {
         list_store_recyclerview.setLayoutManager(new GridLayoutManager(this, 2));
         list_store_recyclerview.setAdapter(myAdapter);
     }
+
 }
