@@ -181,13 +181,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="2dp"
-                        android:text="4.2 km"
+                        android:text=""
                         android:textColor="#28F430" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text=" (tu vi tri hien tai)" />
+                        android:text=" (từ vị trí hiện tại)" />
                 </LinearLayout>
             </LinearLayout>
 
