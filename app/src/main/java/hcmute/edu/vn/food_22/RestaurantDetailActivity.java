@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.format.Time;
 import android.view.View;
@@ -12,13 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.time.format.DateTimeFormatter;
-import java.util.Timer;
-
 public class RestaurantDetailActivity extends AppCompatActivity {
 
     private ImageView img_back;
-    private TextView txtTenQuan, txtTinh, txtTrangThai, txtGio;
+    private TextView txtTenQuan, txtTinh, txtTrangThai, txtGio, txtStart;
     private Button btnLienHe;
     private int res_id;
     private Database database = new Database(this, "foody.db", null, 1);
@@ -33,6 +31,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         txtTrangThai = (TextView) findViewById(R.id.txtTrangThai);
         txtGio = (TextView) findViewById(R.id.txtGio);
         img_back = (ImageView) findViewById(R.id.img_back);
+        txtStart = (TextView) findViewById(R.id.txtStart);
 
         Intent intent = getIntent();
         res_id = intent.getIntExtra("res_id", 0);
@@ -48,14 +47,17 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 }
 
     private void GetRestaurant(){
-        Cursor dataRes = database.GetData("SELECT Province.name, res_name, res_open, res_close FROM Province INNER JOIN Restaurant ON Province.province_id = Restaurant.province_id WHERE " +
+        Cursor dataRes = database.GetData("SELECT Province.name, res_name, res_open, res_close, res_address FROM Province INNER JOIN Restaurant ON Province.province_id = Restaurant.province_id WHERE " +
                 "Restaurant.res_id = " + res_id);
         dataRes.moveToFirst();
         txtTenQuan.setText(dataRes.getString(1));
         txtTinh.setText(dataRes.getString(0));
         txtTrangThai.setText(CheckStatus(dataRes.getString(2), dataRes.getString(3)));
+        if(txtTrangThai.getText().equals("ĐANG MỞ CỬA"))
+            txtTrangThai.setTextColor(Color.BLACK);
         String temp = dataRes.getString(2) + " - " + dataRes.getString(3);
         txtGio.setText(temp);
+        txtStart.setText(dataRes.getString(4));
     }
 
     private String CheckStatus(String flag1, String flag2){
@@ -63,7 +65,10 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         now.setToNow();
         String[] temp1 = flag1.split(":");
         String[] temp2 = flag2.split(":");
-        if((Integer.parseInt(temp1[0]) <= now.hour) && (Integer.parseInt(temp2[0]) >= now.hour)){
+        long timeStrat = Integer.parseInt(temp1[0]) * 3600 + Integer.parseInt(temp1[1]) * 60;
+        long timeStop = Integer.parseInt(temp2[0]) * 3600 + Integer.parseInt(temp2[1]) * 60;
+        long flag = now.hour * 3600 + now.minute * 60;
+        if(timeStrat <= flag && flag <= timeStop){
             return "ĐANG MỞ CỬA";
         } else {
             return "CHƯA MỞ CỬA";
