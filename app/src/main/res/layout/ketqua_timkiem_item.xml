@@ -11,7 +11,6 @@
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_weight="1"
-        android:layout_margin="5dp"
         android:scaleType="centerCrop"/>
     <LinearLayout
         android:layout_width="0dp"
@@ -25,7 +24,6 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_margin="5dp"
-            android:textColor="#000000"
             android:text="Bún Đậu Cô Chang"/>
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,7 +35,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:text="Chợ Bùi Đức, Quốc Lộ 1A, P.Tam Hoà"
-                android:textColor="#000000"
                 android:singleLine="true"
                 android:maxLines="1"
                 android:gravity="left"/>
@@ -47,7 +44,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:text="12 km"
-                android:textColor="#000000"
                 android:singleLine="true"
                 android:maxLines="1"
                 android:gravity="right"/>
@@ -58,7 +54,6 @@
             android:layout_height="match_parent"
             android:text="Quán ăn"
             android:layout_margin="5dp"
-            android:textColor="#000000"
             android:gravity="bottom"/>
     </LinearLayout>
 </LinearLayout>
