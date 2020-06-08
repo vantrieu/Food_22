@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         database.CreateTableRestaurant();
         database.CreateTableTypeFood();
         database.CreateTableFood();
+        database.CreateTableWifi();
 
 
         try {

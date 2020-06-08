@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,6 +19,7 @@ import android.os.Bundle;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +39,8 @@ public class RestaurantDetailActivity extends AppCompatActivity{
     private GoogleApiClient gac;
 
     private ImageView img_back;
-    private TextView txtTenQuan, txtTinh, txtTrangThai, txtGio, txtStart, txtKhoangcach, txtLoaiHinh, txtGia;
+    private TextView txtTenQuan, txtTinh, txtTrangThai, txtGio, txtStart,
+            txtKhoangcach, txtLoaiHinh, txtGia, txtAddWifi;
     private Button btnLienHe;
     private int res_id;
     private Database database = new Database(this, "foody.db", null, 1);
@@ -56,6 +59,7 @@ public class RestaurantDetailActivity extends AppCompatActivity{
         txtKhoangcach = (TextView) findViewById(R.id.txtKhoangCach);
         txtLoaiHinh = (TextView) findViewById(R.id.txtLoaiHinh);
         txtGia = (TextView) findViewById(R.id.txtGia);
+        txtAddWifi = (TextView) findViewById(R.id.txtAddWifi);
 
         Intent intent = getIntent();
         res_id = intent.getIntExtra("res_id", 0);
@@ -68,6 +72,27 @@ public class RestaurantDetailActivity extends AppCompatActivity{
         });
 
         GetRestaurant();
+
+        txtAddWifi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog=new Dialog(RestaurantDetailActivity.this);
+                dialog.setContentView(R.layout.wifi);
+                EditText edt_wifi=(EditText) dialog.findViewById(R.id.wifi);
+                EditText edt_pass=(EditText) dialog.findViewById(R.id.pass);
+                Button btnSubmit=(Button) dialog.findViewById(R.id.btnSubmit);
+                dialog.show();
+
+                btnSubmit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //code thêm dữ liệu wifi
+
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
 }
 
     private void GetRestaurant(){
