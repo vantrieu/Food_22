@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,6 +17,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.Button;
@@ -40,7 +42,7 @@ public class RestaurantDetailActivity extends AppCompatActivity{
 
     private ImageView img_back;
     private TextView txtTenQuan, txtTinh, txtTrangThai, txtGio, txtStart,
-            txtKhoangcach, txtLoaiHinh, txtGia, txtAddWifi;
+            txtKhoangcach, txtLoaiHinh, txtGia, txtAddWifi, txtWifi, txtMenu;
     private Button btnLienHe;
     private int res_id;
     private Database database = new Database(this, "foody.db", null, 1);
@@ -60,6 +62,8 @@ public class RestaurantDetailActivity extends AppCompatActivity{
         txtLoaiHinh = (TextView) findViewById(R.id.txtLoaiHinh);
         txtGia = (TextView) findViewById(R.id.txtGia);
         txtAddWifi = (TextView) findViewById(R.id.txtAddWifi);
+        txtWifi = (TextView) findViewById(R.id.txtWifi);
+        txtMenu = (TextView) findViewById(R.id.txtMenu);
 
         Intent intent = getIntent();
         res_id = intent.getIntExtra("res_id", 0);
@@ -72,28 +76,70 @@ public class RestaurantDetailActivity extends AppCompatActivity{
         });
 
         GetRestaurant();
+        PopulateWifi();
 
         txtAddWifi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Dialog dialog=new Dialog(RestaurantDetailActivity.this);
                 dialog.setContentView(R.layout.wifi);
-                EditText edt_wifi=(EditText) dialog.findViewById(R.id.wifi);
-                EditText edt_pass=(EditText) dialog.findViewById(R.id.pass);
+                final EditText edt_wifi=(EditText) dialog.findViewById(R.id.wifi);
+                final EditText edt_pass=(EditText) dialog.findViewById(R.id.pass);
                 Button btnSubmit=(Button) dialog.findViewById(R.id.btnSubmit);
                 dialog.show();
+
+                final Cursor dataWifi = database.GetData("SELECT wifi_id, wifi_name, wifi_pass FROM Wifi WHERE Wifi.res_id = " + res_id);
+                dataWifi.moveToFirst();
+                if(dataWifi.getCount() > 0){
+                    edt_wifi.setText(dataWifi.getString(1));
+                    edt_pass.setText(dataWifi.getString(2));
+                }
 
                 btnSubmit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //code thêm dữ liệu wifi
-
+                        dataWifi.moveToFirst();
+                        if(!edt_wifi.getText().equals(dataWifi.getString(1)) || !edt_pass.getText().equals(dataWifi.getString(2))){
+                           database.QueryData("UPDATE Wifi SET wifi_name = '" + edt_wifi.getText() + "', wifi_pass = '" + edt_pass.getText() +
+                                   "' WHERE wifi_id = " + dataWifi.getInt(0));
+                        }
+                        Cursor dataWifi = database.GetData("SELECT wifi_id, wifi_name, wifi_pass FROM Wifi WHERE Wifi.res_id = " + res_id);
+                        dataWifi.moveToFirst();
+                        txtAddWifi.setTextColor(Color.BLUE);
+                        txtAddWifi.setText(dataWifi.getString(1));
+                        txtWifi.setText(dataWifi.getString(2));
                         dialog.dismiss();
                     }
                 });
             }
         });
-}
+
+        txtWifi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                startActivity(intent);
+            }
+        });
+
+        txtMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RestaurantDetailActivity.this, MenuRestaurantActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void PopulateWifi() {
+        Cursor dataWifi = database.GetData("SELECT wifi_id, wifi_name, wifi_pass FROM Wifi WHERE Wifi.res_id = " + res_id);
+        dataWifi.moveToFirst();
+        if(dataWifi.getCount() > 0){
+            txtAddWifi.setTextColor(Color.BLUE);
+            txtAddWifi.setText(dataWifi.getString(1));
+            txtWifi.setText(dataWifi.getString(2));
+        }
+    }
 
     private void GetRestaurant(){
         Cursor dataRes = database.GetData("SELECT Province.name, res_name, res_open, res_close, res_address, res_type FROM Province INNER JOIN " +

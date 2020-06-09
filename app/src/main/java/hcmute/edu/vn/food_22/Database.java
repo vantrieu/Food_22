@@ -122,7 +122,7 @@ public class Database extends SQLiteOpenHelper {
         QueryData(sql);
         Cursor dataWifi = GetData("SELECT * FROM Wifi");
         if(dataWifi.getCount() == 0) {
-
+            QueryData("INSERT INTO Wifi VALUES (null, 'Xoi A Ho', 'hoilamgi', 1)");
         }
     }
 }
