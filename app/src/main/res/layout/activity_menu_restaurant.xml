@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/cardView_id"
+    android:id="@+id/myLinearLayout"
     android:clickable="true"
     android:orientation="vertical">
 
@@ -69,9 +69,10 @@
         android:layout_height="40dp"
         android:background="#F1F1F1"
         android:orientation="vertical"
-        android:paddingTop="9dp"
-        >
-        <TextView android:layout_width="wrap_content"
+        android:paddingTop="9dp">
+        <TextView
+            android:id="@+id/txtRes_id"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="Bún Đậu Cô Giang"
             android:textColor="#A9322E"
@@ -79,15 +80,9 @@
             android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 
-    <ExpandableListView
-        android:layout_marginTop="10dp"
-        android:background="#40E5E5E5"
+    <FrameLayout
+        android:id="@+id/container_body"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:groupIndicator="@null"
-        android:id="@+id/expandable_list_view_menu"
-        >
-
-    </ExpandableListView>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
