@@ -1,11 +1,13 @@
 package hcmute.edu.vn.food_22;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,25 +16,37 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+
 import java.util.ArrayList;
 
+import hcmute.edu.vn.food_22.tabslide2.SectionsPagerAdapter;
+
 public class ShowKQTimKiem extends AppCompatActivity {
+
+    public static String[] tabs = {"Đúng nhất", "Gần tôi", "Phổ biến","Bộ lọc"};
+    private TabLayout tabLayout;
+    private ViewPager mViewPager;
+    public static int[] resourceIds = {
+            R.layout.frag_1_slide2
+            ,R.layout.frag_2_slide2
+            ,R.layout.frag_3_slide2
+            ,R.layout.frag_4_slide2
+    };
 
     LinearLayout ln2;
     EditText edt_find;
     TextView txt_tinh;
     ImageView img_back;
-    ArrayList<InfoQuan> arrayList;
-    ShowKQAdapter adapter;
-    ListView listView;
     String text_input_by_user;
+    SectionsPagerAdapter sectionsPagerAdapter;
     int province_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_kq_tim_kiem);
         anhXa();
-
         Intent receive=getIntent();
         String keyword=receive.getExtras().getString("key");
         String province_name=receive.getExtras().getString("province_name");
@@ -41,9 +55,13 @@ public class ShowKQTimKiem extends AppCompatActivity {
         txt_tinh.setText(province_name);
         text_input_by_user=receive.getExtras().getString("input");
 
-        setEvent();
+        sectionsPagerAdapter = new SectionsPagerAdapter(this,text_input_by_user,province_id, getSupportFragmentManager());
+        mViewPager = findViewById(R.id.view_pager);
+        mViewPager.setAdapter(sectionsPagerAdapter);
+        tabLayout = findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mViewPager);
 
-        loadDATA();
+        setEvent();
     }
 
     private void setEvent()
@@ -54,10 +72,17 @@ public class ShowKQTimKiem extends AppCompatActivity {
                 finish();
             }
         });
-        edt_find.setOnClickListener(new View.OnClickListener() {
+        edt_find.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public void onClick(View v) {
-                loadDATA2();
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
+                {
+                sectionsPagerAdapter = new SectionsPagerAdapter(ShowKQTimKiem.this,edt_find.getText().toString(),province_id, getSupportFragmentManager());
+                mViewPager.setAdapter(sectionsPagerAdapter);
+                tabLayout.setupWithViewPager(mViewPager);
+                return true;
+                }
+                return false;
             }
         });
     }
@@ -74,75 +99,7 @@ public class ShowKQTimKiem extends AppCompatActivity {
     {
         edt_find=findViewById(R.id.editText);
         txt_tinh=findViewById(R.id.txtTinh);
-        listView=findViewById(R.id.listView_id);
         img_back=findViewById(R.id.img_back);
         ln2 =findViewById(R.id.linearLayout2);
-    }
-
-    private void loadDATA()
-    {
-        arrayList=new ArrayList<>();
-        adapter=new ShowKQAdapter(this,R.layout.ketqua_timkiem_item,arrayList);
-        listView.setAdapter(adapter);
-
-        Cursor cursor=get_by_food(text_input_by_user,province_id);
-        if(cursor.getCount()<1)
-        {
-            cursor=get_by_name(text_input_by_user,province_id);
-            if(cursor.getCount()<1)
-            {
-                Toast.makeText(this, "Không tìm thấy quán ăn phù hợp", Toast.LENGTH_SHORT).show();
-            }
-        }
-        while (cursor.moveToNext())
-        {
-            Log.e("DATA",cursor.getString(1));
-            arrayList.add(new InfoQuan(cursor.getString(1),cursor.getString(3),0,cursor.getString(2),cursor.getString(4)));
-        }
-
-        adapter.notifyDataSetChanged();
-    }
-
-    private void loadDATA2()
-    {
-        arrayList.clear();
-        Cursor cursor=get_by_food(edt_find.getText().toString(),province_id);
-        if(cursor.getCount()<1)
-        {
-            cursor=get_by_name(edt_find.getText().toString(),province_id);
-            if(cursor.getCount()<1)
-            {
-                Toast.makeText(this, "Không tìm thấy quán ăn phù hợp", Toast.LENGTH_SHORT).show();
-            }
-        }
-        while (cursor.moveToNext())
-        {
-            Log.e("DATA",cursor.getString(1));
-            arrayList.add(new InfoQuan(cursor.getString(1),cursor.getString(3),0,cursor.getString(2),cursor.getString(4)));
-        }
-
-        adapter.notifyDataSetChanged();
-    }
-
-    private Cursor get_all()
-    {
-        Database dt=new Database(this, "foody.db", null, 1);
-        //Cursor cursor=dt.GetData("SELECT res_id, res_name, res_type, res_address, res_img, province_id FROM Restaurant");
-        Cursor cursor=dt.GetData("SELECT * FROM Type_Food");
-        return cursor;
-    }
-
-    private Cursor get_by_name(String name, int province)
-    {
-        Database dt=new Database(this, "foody.db", null, 1);
-        Cursor cursor=dt.GetData("SELECT DISTINCT res_id, res_name, res_type, res_address, res_img, province_id FROM Restaurant WHERE province_id="+province+" AND res_name LIKE '%"+name+"%'");
-        return cursor;
-    }
-
-    private Cursor get_by_food(String str,int province)
-    {
-        Database dt=new Database(this, "foody.db", null, 1);
-        Cursor cursor=dt.GetData("SELECT DISTINCT Restaurant.res_id, res_name, res_type, res_address, res_img, province_id FROM Restaurant LEFT JOIN Food ON Restaurant.res_id=Food.res_id WHERE province_id="+province+" AND (food_name LIKE '%"+str+"%' or res_name LIKE '%"+str+"%')");
-        return cursor;
     }
 }

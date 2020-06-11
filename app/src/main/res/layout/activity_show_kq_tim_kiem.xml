@@ -105,10 +105,23 @@
 
 
     </LinearLayout>
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabTextAppearance="@style/CustomTabTitle"
+        app:tabMode="fixed"
+        app:tabGravity="fill"
+        android:background="@android:color/white" />
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <ListView
+    <!--ListView
         android:id="@+id/listView_id"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" /-->
 
 </LinearLayout>

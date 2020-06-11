@@ -13,17 +13,21 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import hcmute.edu.vn.food_22.tabslide2.PlaceholderFragment;
+import hcmute.edu.vn.food_22.tabslide2.SectionsPagerAdapter;
+
 public class ShowKQAdapter extends BaseAdapter {
 
     private ShowKQTimKiem context;
     private int layout;
-    private List<InfoQuan> dsQuan;  //danh sách quán
+    private List<Store> dsQuan;  //danh sách quán
 
-    public ShowKQAdapter(ShowKQTimKiem context, int layout, List<InfoQuan> dsQuan) {
+    public ShowKQAdapter(ShowKQTimKiem context, int layout, List<Store> dsQuan) {
         this.context = context;
         this.layout = layout;
         this.dsQuan = dsQuan;
     }
+
 
     @Override
     public int getCount() {
@@ -65,12 +69,12 @@ public class ShowKQAdapter extends BaseAdapter {
         {
             holder= (ViewHolder) convertView.getTag();
         }
-        final InfoQuan infoQuan=dsQuan.get(position);
-        holder.tenQuan.setText(infoQuan.getTenQuan());
-        holder.diaChi.setText(infoQuan.getDiaChi());
-        holder.khoangCach.setText(String.valueOf(infoQuan.getKhoangCach())+" km");
-        holder.loaiHinh.setText(infoQuan.getLoaiHinh());
-        Picasso.with(context).load(infoQuan.getThumbnail()).into(holder.img_info);
+        final Store infoQuan=dsQuan.get(position);
+        holder.tenQuan.setText(infoQuan.getRes_name());
+        holder.diaChi.setText(infoQuan.getRes_address());
+        holder.khoangCach.setText("0 km");
+        holder.loaiHinh.setText(infoQuan.getTes_type());
+        Picasso.with(context).load(infoQuan.getUrl()).into(holder.img_info);
         return convertView;
     }
 
