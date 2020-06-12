@@ -7,16 +7,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.location.Address;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +20,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private TextView txtAddress;
     private static final int REQUEST_CODE = 123;
-    List<Store> lstStore;
+    private List<Store> lstStore;
     RecyclerView list_store_recyclerview;
     EditText edt_address;
     int province_id;

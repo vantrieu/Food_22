@@ -4,14 +4,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MenuRestaurantActivity extends AppCompatActivity {
 
@@ -19,7 +26,9 @@ public class MenuRestaurantActivity extends AppCompatActivity {
     private TextView txtRes_name;
     private ImageView imgBack;
     private int Res_id;
+    public static List<Food> lstFood;
     private Database database = new Database(this, "foody.db", null, 1);
+    public static Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +43,7 @@ public class MenuRestaurantActivity extends AppCompatActivity {
         imgBack = (ImageView) findViewById(R.id.imgbutton_back);
         txtRes_name = (TextView) findViewById(R.id.txtRes_id);
 
+        mContext = this;
         getData();
 
         btnThucDon.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +61,7 @@ public class MenuRestaurantActivity extends AppCompatActivity {
                 btnThucDon.setBackgroundResource(R.drawable.button_menu_normal);
                 btnAnh.setBackgroundResource(R.drawable.button_menu_active);
                 addFragment(new Fragment2());
+
             }
         });
 
@@ -64,9 +75,15 @@ public class MenuRestaurantActivity extends AppCompatActivity {
         addFragment(new Fragment1());
     }
     protected void getData(){
+        lstFood=new ArrayList<>();
         Cursor dataRes = database.GetData("SELECT res_name FROM Restaurant WHERE Restaurant.res_id =" + Res_id);
         dataRes.moveToFirst();
         txtRes_name.setText(dataRes.getString(0));
+        Cursor dataFood = database.GetData("SELECT * FROM Food WHERE Food.res_id = " + Res_id);
+        while (dataFood.moveToNext()) {
+            lstFood.add( new Food(dataFood.getInt(0), dataFood.getString(1),  dataFood.getInt(2), dataFood.getString(3),
+                    dataFood.getString(4), dataFood.getInt(5), dataFood.getInt(6)));
+        }
     }
 
     protected void addFragment(Fragment fragment) {
