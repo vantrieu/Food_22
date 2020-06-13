@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -33,13 +35,11 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RestaurantDetailActivity extends AppCompatActivity{
-
-    private Location location;
-    private GoogleApiClient gac;
-
+    private RecyclerView recyclerView;
     private ImageView img_back;
     private TextView txtTenQuan, txtTinh, txtTrangThai, txtGio, txtStart,
             txtKhoangcach, txtLoaiHinh, txtGia, txtAddWifi, txtWifi, txtMenu;
@@ -64,6 +64,7 @@ public class RestaurantDetailActivity extends AppCompatActivity{
         txtAddWifi = (TextView) findViewById(R.id.txtAddWifi);
         txtWifi = (TextView) findViewById(R.id.txtWifi);
         txtMenu = (TextView) findViewById(R.id.txtMenu);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerview_img);
 
         Intent intent = getIntent();
         res_id = intent.getIntExtra("res_id", 0);
@@ -76,6 +77,7 @@ public class RestaurantDetailActivity extends AppCompatActivity{
         });
 
         GetRestaurant();
+        GetImage();
         PopulateWifi();
 
         txtAddWifi.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +134,18 @@ public class RestaurantDetailActivity extends AppCompatActivity{
         });
     }
 
+    private void GetImage() {
+        List<Food> lstFood=new ArrayList<>();
+        Cursor dataFood = database.GetData("SELECT * FROM Food WHERE Food.res_id = " + res_id);
+        while (dataFood.moveToNext()) {
+            lstFood.add( new Food(dataFood.getInt(0), dataFood.getString(1),  dataFood.getInt(2), dataFood.getString(3),
+                    dataFood.getString(4), dataFood.getInt(5), dataFood.getInt(6)));
+        }
+        RecyclerviewFoodAdapter myAdapter = new RecyclerviewFoodAdapter(this, lstFood);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setAdapter(myAdapter);
+    }
+
     private void PopulateWifi() {
         Cursor dataWifi = database.GetData("SELECT wifi_id, wifi_name, wifi_pass FROM Wifi WHERE Wifi.res_id = " + res_id);
         dataWifi.moveToFirst();
@@ -164,7 +178,8 @@ public class RestaurantDetailActivity extends AppCompatActivity{
             if(dataFood.getInt(0) > big)
                 big = dataFood.getInt(0);
         }
-        txtGia.setText(String.valueOf(small) +"đ - " + String.valueOf(big) + "đ");
+        //txtGia.setText(String.valueOf(small) +"đ - " + String.valueOf(big) + "đ");
+        txtGia.setText(ConvertString(small) + " - " + ConvertString(big));
     }
 
     private String CheckStatus(String flag1, String flag2){
@@ -180,5 +195,19 @@ public class RestaurantDetailActivity extends AppCompatActivity{
         } else {
             return "CHƯA MỞ CỬA";
         }
+    }
+
+    private String ConvertString(int temp){
+        String s = String.valueOf(temp);
+        StringBuilder str = new StringBuilder(s);
+        int count = s.length();
+        int flag = 0;
+        for (int i = (count -1); i > 0 ; i--){
+            flag += 1;
+            if(flag % 3 == 0){
+                str.insert(i, ".");
+            }
+        }
+        return str + "đ";
     }
 }

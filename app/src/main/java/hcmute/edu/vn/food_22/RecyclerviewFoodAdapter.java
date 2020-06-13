@@ -37,7 +37,7 @@ public class RecyclerviewFoodAdapter extends RecyclerView.Adapter<RecyclerviewFo
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.tv_food_name.setText(mData.get(position).getFood_name());
-        holder.tv_food_price.setText(String.valueOf(mData.get(position).getPrice()));
+        holder.tv_food_price.setText(ConvertString(mData.get(position).getPrice()));
 
         String urlTemp = mData.get(position).getFood_img();
         Picasso.with(mContext).load(urlTemp).into(holder.img_food);
@@ -60,5 +60,19 @@ public class RecyclerviewFoodAdapter extends RecyclerView.Adapter<RecyclerviewFo
             tv_food_price = (TextView) itemView.findViewById((R.id.txt_food_price));
             img_food = (ImageView) itemView.findViewById(R.id.img_food_avatar);
         }
+    }
+
+    private String ConvertString(int temp){
+        String s = String.valueOf(temp);
+        StringBuilder str = new StringBuilder(s);
+        int count = s.length();
+        int flag = 0;
+        for (int i = (count -1); i > 0 ; i--){
+            flag += 1;
+            if(flag % 3 == 0){
+                str.insert(i, ".");
+            }
+        }
+        return str + "đ";
     }
 }
