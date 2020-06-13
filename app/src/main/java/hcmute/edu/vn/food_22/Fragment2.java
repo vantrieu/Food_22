@@ -29,7 +29,7 @@ public class Fragment2 extends Fragment {
         list_food_recyclerview = (RecyclerView) view.findViewById(R.id.recyclerview_food);
 
         RecyclerviewFoodAdapter myAdapter = new RecyclerviewFoodAdapter(mContext, MenuRestaurantActivity.lstFood);
-        list_food_recyclerview.setLayoutManager(new GridLayoutManager(mContext, 1));
+        list_food_recyclerview.setLayoutManager(new GridLayoutManager(mContext, 2));
         list_food_recyclerview.setAdapter(myAdapter);
         return view;
     }
