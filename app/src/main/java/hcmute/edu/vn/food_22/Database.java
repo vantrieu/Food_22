@@ -99,6 +99,8 @@ public class Database extends SQLiteOpenHelper {
             QueryData("INSERT INTO Type_Food VALUES (null, 'Mì')");
             QueryData("INSERT INTO Type_Food VALUES (null, 'Cơm')");
             QueryData("INSERT INTO Type_Food VALUES (null, 'Nước')");
+            QueryData("INSERT INTO Type_Food VALUES (null, 'Bò Mỹ nhúng ớt')");
+            QueryData("INSERT INTO Type_Food VALUES (null, 'Bún đậu')");
         }
     }
 
@@ -110,7 +112,16 @@ public class Database extends SQLiteOpenHelper {
         QueryData(sql);
         Cursor dataFood = GetData("SELECT * FROM Food");
         if(dataFood.getCount() == 0) {
-            QueryData("INSERT INTO Food VALUES(null, 'Xôi nếp cẩm', 1, 'Xôi này cũng tạm', 'https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg', 10000, 1)");
+            QueryData("INSERT INTO Food VALUES(null, 'Bò Mỹ nhúng ớt nhỏ', 5, 'Cay xé lưỡi', 'https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg', 100000, 1)");
+            QueryData("INSERT INTO Food VALUES(null, 'Bò Mỹ nhúng ớt vừa', 5, 'Cay xé lưỡi', 'https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg', 130000, 1)");
+            QueryData("INSERT INTO Food VALUES(null, 'Bò Mỹ nhúng ớt lớn', 5, 'Cay xé lưỡi', 'https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg', 170000, 1)");
+            QueryData("INSERT INTO Food VALUES(null, 'Bò Mỹ nhúng ớt nhỏ', 5, 'Cay xé lưỡi', 'https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg', 100000, 1)");
+            QueryData("INSERT INTO Food VALUES(null, 'Bò Mỹ nhúng ớt nhỏ', 5, 'Cay xé lưỡi', 'https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg', 100000, 1)");
+            QueryData("INSERT INTO Food VALUES(null, 'Bún đậu Cô Hồn', 6, 'Bao no', 'https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg', 80000, 1)");
+            QueryData("INSERT INTO Food VALUES(null, 'Bún đậu Cô Hồn', 6, 'Bao no', 'https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg', 80000, 1)");
+            QueryData("INSERT INTO Food VALUES(null, 'Bún đậu Cô Hồn', 6, 'Bao no', 'https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg', 80000, 1)");
+            QueryData("INSERT INTO Food VALUES(null, 'Bún đậu Cô Hồn', 6, 'Bao no', 'https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg', 80000, 1)");
+            QueryData("INSERT INTO Food VALUES(null, 'Bún đậu Cô Hồn', 6, 'Bao no', 'https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg', 80000, 1)");
             QueryData("INSERT INTO Food VALUES(null, 'Cơm gà xối mỡ', 3, 'Đùi gà to, nước sốt có khả năng gây nghiện', 'https://deloy.tech/dongnai/duongky4/combochaytoi.jpg', 25000, 1)");
             QueryData("INSERT INTO Food VALUES(null, 'Xôi nếp cẩm', 1, 'Xôi này cũng tạm', 'https://deloy.tech/dongnai/xoiaho/xoigaxe.jpg', 15000, 1)");
             QueryData("INSERT INTO Food VALUES(null, 'Cơm gà xối mỡ', 3, 'Đùi gà to, nước sốt có khả năng gây nghiện', 'https://deloy.tech/dongnai/duongky4/combochaytoi.jpg', 25000, 1)");

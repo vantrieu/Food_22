@@ -24,8 +24,6 @@ public class Fragment2 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_2, container, false);
-        Bundle bundle = getArguments();
-        res_id = bundle.getInt("res_id");
         list_food_recyclerview = (RecyclerView) view.findViewById(R.id.recyclerview_food);
 
         RecyclerviewFoodAdapter myAdapter = new RecyclerviewFoodAdapter(mContext, MenuRestaurantActivity.lstFood);
