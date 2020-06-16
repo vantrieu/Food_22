@@ -64,7 +64,7 @@ public class CustomExpanableList extends BaseExpandableListAdapter {
         TextView txtGroup=convertView.findViewById(R.id.text_view_group_header);
         ImageView imageView=convertView.findViewById(R.id.group_food_image);
         if(isExpanded)
-            imageView.setImageResource(R.drawable.drop);
+            imageView.setImageResource(R.drawable.b);
         txtGroup.setText(groupName);
         return convertView;
     }

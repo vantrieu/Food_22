@@ -101,19 +101,6 @@ public class PlaceholderFragment extends Fragment
                     }
                 });
                 break;
-            case 2:
-                listView=(ListView) rootView.findViewById(R.id.listView3_slide2);
-                loadDATA(3);
-                listView.setAdapter(showKQAdapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent = new Intent(context, RestaurantDetailActivity.class);
-                        intent.putExtra("res_id",arrayList.get(position).getRes_id());
-                        context.startActivity(intent);
-                    }
-                });
-                break;
             default:
                 break;
         }

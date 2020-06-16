@@ -25,14 +25,12 @@ import hcmute.edu.vn.food_22.tabslide2.SectionsPagerAdapter;
 
 public class ShowKQTimKiem extends AppCompatActivity {
 
-    public static String[] tabs = {"Đúng nhất", "Gần tôi", "Phổ biến","Bộ lọc"};
+    public static String[] tabs = {"Đúng nhất", "Gần tôi"};
     private TabLayout tabLayout;
     private ViewPager mViewPager;
     public static int[] resourceIds = {
             R.layout.frag_1_slide2
             ,R.layout.frag_2_slide2
-            ,R.layout.frag_3_slide2
-            ,R.layout.frag_4_slide2
     };
 
     LinearLayout ln2;
