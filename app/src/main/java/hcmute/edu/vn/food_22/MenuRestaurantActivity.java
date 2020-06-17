@@ -4,18 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +22,7 @@ public class MenuRestaurantActivity extends AppCompatActivity {
     private Button btnThucDon, btnAnh;
     private TextView txtRes_name;
     private ImageView imgBack;
-    private int Res_id;
+    public static int Res_id;
     public static List<Food> lstFood;
     private Database database = new Database(this, "foody.db", null, 1);
     public static Context mContext;

@@ -14,7 +14,7 @@ import java.util.List;
 public class CustomExpanableList extends BaseExpandableListAdapter {
     Context context;
     List<String> listFoodGroup;
-    HashMap<String, List<Food>> listDataChild;
+    HashMap<String, List<FoodMenu>> listDataChild;
     @Override
     public int getGroupCount() {
         return listFoodGroup.size();
@@ -25,7 +25,7 @@ public class CustomExpanableList extends BaseExpandableListAdapter {
         return listDataChild.get(listFoodGroup.get(groupPosition)).size();
     }
 
-    public CustomExpanableList(Context context, List<String> listFoodGroup, HashMap<String, List<Food>> listDataChild) {
+    public CustomExpanableList(Context context, List<String> listFoodGroup, HashMap<String, List<FoodMenu>> listDataChild) {
         this.context = context;
         this.listFoodGroup = listFoodGroup;
         this.listDataChild = listDataChild;
@@ -71,13 +71,13 @@ public class CustomExpanableList extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        Food food= (Food) getChild(groupPosition,childPosition);
+        FoodMenu food= (FoodMenu) getChild(groupPosition,childPosition);
         LayoutInflater layoutInflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView=layoutInflater.inflate(R.layout.extenable_food_view,null);
         TextView txtFoodName=convertView.findViewById(R.id.text_view_food_name);
         TextView txtFoodPrice=convertView.findViewById(R.id.text_view_food_price);
-        txtFoodName.setText(food.getFood_name());
-        txtFoodPrice.setText(String.valueOf(food.getPrice()));
+        txtFoodName.setText(food.getTenMon());
+        txtFoodPrice.setText(food.getGiaCa());
         return convertView;
     }
 
