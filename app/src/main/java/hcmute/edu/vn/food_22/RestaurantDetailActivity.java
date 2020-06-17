@@ -32,13 +32,19 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RestaurantDetailActivity extends AppCompatActivity{
+public class RestaurantDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
     private RecyclerView recyclerView;
     private ImageView img_back;
     private TextView txtTenQuan, txtTinh, txtTrangThai, txtGio, txtStart,
@@ -132,6 +138,10 @@ public class RestaurantDetailActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager()
+                .findFragmentById(R.id.MyMap);
+        mapFragment.getMapAsync(this);
     }
 
     private void GetImage() {
@@ -178,7 +188,6 @@ public class RestaurantDetailActivity extends AppCompatActivity{
             if(dataFood.getInt(0) > big)
                 big = dataFood.getInt(0);
         }
-        //txtGia.setText(String.valueOf(small) +"đ - " + String.valueOf(big) + "đ");
         txtGia.setText(ConvertString(small) + " - " + ConvertString(big));
     }
 
@@ -210,4 +219,30 @@ public class RestaurantDetailActivity extends AppCompatActivity{
         }
         return str + "đ";
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        LatLng temp = getLocationFromAddress(this, txtStart.getText().toString());
+        googleMap.addMarker(new MarkerOptions().position(temp).title(txtTenQuan.getText().toString()));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(temp, 12));
+    }
+
+    public LatLng getLocationFromAddress(Context context,String strAddress) {
+        Geocoder coder = new Geocoder(context);
+        List<Address> address;
+        LatLng p1 = null;
+        try {
+            address = coder.getFromLocationName(strAddress, 5);
+            if (address == null) {
+                return null;
+            }
+            Address location = address.get(0);
+            p1 = new LatLng(location.getLatitude(), location.getLongitude() );
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return p1;
+    }
+
+
 }
