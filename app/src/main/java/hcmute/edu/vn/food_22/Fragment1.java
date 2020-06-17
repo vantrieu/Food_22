@@ -78,7 +78,7 @@ public class Fragment1 extends Fragment {
         Cursor dataFood = database.GetData("SELECT food_name, price FROM Food WHERE res_id = " + MenuRestaurantActivity.Res_id +
                 " AND type_id = " + flag);
         while (dataFood.moveToNext()) {
-            listFoodData.add(new FoodMenu(dataFood.getString(0), String.valueOf(dataFood.getInt(1))));
+            listFoodData.add(new FoodMenu(dataFood.getString(0), ConvertString(dataFood.getInt(1))));
         }
         return listFoodData;
     }
@@ -99,5 +99,19 @@ public class Fragment1 extends Fragment {
                 listTypeFood.add(String.valueOf(DataType.getString(0)));
         }
         return listTypeFood;
+    }
+
+    private String ConvertString(int temp){
+        String s = String.valueOf(temp);
+        StringBuilder str = new StringBuilder(s);
+        int count = s.length();
+        int flag = 0;
+        for (int i = (count -1); i > 0 ; i--){
+            flag += 1;
+            if(flag % 3 == 0){
+                str.insert(i, ".");
+            }
+        }
+        return str.toString();
     }
 }
