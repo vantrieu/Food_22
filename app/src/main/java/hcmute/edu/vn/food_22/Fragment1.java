@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -22,16 +21,15 @@ public class Fragment1 extends Fragment {
 
     ExpandableListView expandListFood;
     List<String> listFoodGroup;
-    List<List<Food>> listDataFood;
     HashMap<String, List<FoodMenu>> listDataChild;
     CustomExpanableList customExpanableList;
-    Database database = new Database(mContext, "foody.db", null, 1);
-    //List<Food> lstFood;
+    Database database;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_1, container, false);
+        database = new Database(mContext, "foody.db", null, 1);
         addControl(view);
         customExpanableList = new CustomExpanableList(mContext, listFoodGroup, listDataChild);
         expandListFood.setAdapter(customExpanableList);
@@ -59,8 +57,7 @@ public class Fragment1 extends Fragment {
 
     }
 
-    private void addControl(View v)
-    {
+    private void addControl(View v) {
         expandListFood=(ExpandableListView) v.findViewById(R.id.expandable_list_view_menu);
         listFoodGroup=new ArrayList<String>();
         listDataChild=new HashMap<String, List<FoodMenu>>();
@@ -68,34 +65,22 @@ public class Fragment1 extends Fragment {
         List<FoodMenu> listFoodData=new ArrayList<>();
         for(int i=0;i<listFoodGroup.size();i++)
         {
-            //Toast.makeText(mContext, listFoodGroup.get(i), Toast.LENGTH_SHORT).show();
-            //listFoodData = GetListFoodData(listFoodGroup.get(i));
-            if(listFoodGroup.get(i).equals("Bò Mỹ nhúng ớt"))
-            {
-                listFoodData.add(new FoodMenu("Bò Mỹ Núng Ớt Nhỏ","119,000"));
-                listFoodData.add(new FoodMenu("Bò Mỹ Núng Ớt Vừa","239,000"));
-                listFoodData.add(new FoodMenu("Bò Mỹ Núng Ớt Lớn","249,000"));
-                listFoodData.add(new FoodMenu("Bê Thui Mẹt Nhỏ","119,000"));
-                listFoodData.add(new FoodMenu("Bê Thui Mẹt Vừa","239,000"));
-                listFoodData.add(new FoodMenu("Bê Thui Mẹt Lớn","249,000"));
-                listFoodData.add(new FoodMenu("Heo Luộc Thập Cẩm","119,000"));
-
-            }
-//            if(listFoodGroup.get(i).equals("Bún đậu"))
-//            {
-//                listFoodData.add(new FoodMenu("Bún Đậu Nhỏ","50,000"));
-//                listFoodData.add(new FoodMenu("Bún Đậu Vừa","60,000"));
-//                listFoodData.add(new FoodMenu("Bún Đậu Lớn","70,000"));
-//            }
-//            if(listFoodGroup.get(i).equals("Món Thêm"))
-//            {
-//                listFoodData.add(new FoodMenu("Rau Thêm","20,000"));
-//                listFoodData.add(new FoodMenu("Thịt Thêm","100,000"));
-//                listFoodData.add(new FoodMenu("Bún Thêm","20,000"));
-//            }
+            listFoodData = GetListFoodData(listFoodGroup.get(i));
             listDataChild.put(listFoodGroup.get(i),listFoodData);
-            listFoodData=new ArrayList<>();
         }
+    }
+
+    private List<FoodMenu> GetListFoodData(String s) {
+        Cursor dataType = database.GetData("SELECT type_id FROM Type_Food WHERE Type_Food.type_name = '" + s + "'");
+        dataType.moveToFirst();
+        int flag = (int) dataType.getInt(0);
+        List<FoodMenu> listFoodData=new ArrayList<>();
+        Cursor dataFood = database.GetData("SELECT food_name, price FROM Food WHERE res_id = " + MenuRestaurantActivity.Res_id +
+                " AND type_id = " + flag);
+        while (dataFood.moveToNext()) {
+            listFoodData.add(new FoodMenu(dataFood.getString(0), String.valueOf(dataFood.getInt(1))));
+        }
+        return listFoodData;
     }
 
     private ArrayList<String> GetListType(){
