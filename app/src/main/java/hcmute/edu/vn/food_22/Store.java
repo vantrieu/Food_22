@@ -9,9 +9,10 @@ public class Store {
     private String url;
     private String res_open;
     private String res_close;
+    private double distance;
     private int province_id, has_wifi, has_delivery;
 
-    public Store(int res_id, String res_name, String tes_type, String res_address, String description, String url, String res_open, String res_close, int province_id,
+    public Store(int res_id, String res_name, String tes_type, String res_address, double distance, String description, String url, String res_open, String res_close, int province_id,
                  int has_wifi, int has_delivery) {
         this.res_id = res_id;
         this.res_name = res_name;
@@ -24,6 +25,7 @@ public class Store {
         this.province_id = province_id;
         this.has_wifi = has_wifi;
         this.has_delivery = has_delivery;
+        this.distance = distance;
     }
 
     public int getRes_id() {
@@ -64,6 +66,14 @@ public class Store {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 
     public String getUrl() {

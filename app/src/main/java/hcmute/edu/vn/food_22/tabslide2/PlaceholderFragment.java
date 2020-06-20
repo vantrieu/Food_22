@@ -1,8 +1,8 @@
 package hcmute.edu.vn.food_22.tabslide2;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hcmute.edu.vn.food_22.Database;
+import hcmute.edu.vn.food_22.GeocodingLocation;
+import hcmute.edu.vn.food_22.HomeActivity;
 import hcmute.edu.vn.food_22.R;
 import hcmute.edu.vn.food_22.RestaurantDetailActivity;
 import hcmute.edu.vn.food_22.ShowKQAdapter;
@@ -43,7 +45,6 @@ public class PlaceholderFragment extends Fragment
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_SECTION_NUMBER, index);
         fragment.setArguments(bundle);
-        Log.e("Cycle","newInstance");
         return fragment;
     }
 
@@ -62,15 +63,6 @@ public class PlaceholderFragment extends Fragment
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        /*View root = inflater.inflate(R.layout.fragment_main, container, false);
-        final TextView textView = root.findViewById(R.id.section_label);
-        pageViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });*/
-
         int index = getArguments().getInt(ARG_SECTION_NUMBER);
         View rootView = inflater.inflate(resourceIds[index], container, false);
         ListView listView;
@@ -123,10 +115,15 @@ public class PlaceholderFragment extends Fragment
         }
         while (cursor.moveToNext())
         {
+            GeocodingLocation g = new GeocodingLocation();
+            Location temp = g.getAddressFromLocation(cursor.getString(3),context);
+            double distance = g.Calculate(temp.getLatitude(), temp.getLongitude(), HomeActivity.mLastLocation.getLatitude(), HomeActivity.mLastLocation.getLongitude());
+
             arrayList.add(new Store(cursor.getInt(0),
                     cursor.getString(1),
                     cursor.getString(2),
                     cursor.getString(3),
+                    distance,
                     cursor.getString(4),
                     cursor.getString(5),
                     null,
@@ -135,7 +132,6 @@ public class PlaceholderFragment extends Fragment
                     cursor.getInt(7),
                     cursor.getInt(8)));
         }
-        Log.e("CURSOR",String.valueOf(cursor.getCount()));
         showKQAdapter.notifyDataSetChanged();
     }
     private Cursor get_by_name(String name, int province)

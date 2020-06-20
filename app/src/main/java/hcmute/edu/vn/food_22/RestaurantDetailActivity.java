@@ -62,20 +62,7 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_detail);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         txtTenQuan = (TextView) findViewById(R.id.txtTenQuan);
         txtTinh = (TextView) findViewById(R.id.txttinh);
         txtTrangThai = (TextView) findViewById(R.id.txtTrangThai);
@@ -185,6 +172,7 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
     }
 
     private void GetRestaurant() {
+        GeocodingLocation g = new GeocodingLocation();
         Cursor dataRes = database.GetData("SELECT Province.name, res_name, res_open, res_close, res_address, res_type FROM Province INNER JOIN " +
                 "Restaurant ON Province.province_id = Restaurant.province_id WHERE Restaurant.res_id = " + res_id);
         dataRes.moveToFirst();
@@ -196,6 +184,9 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
         String temp = dataRes.getString(2) + " - " + dataRes.getString(3);
         txtGio.setText(temp);
         txtStart.setText(dataRes.getString(4));
+        Location t = g.getAddressFromLocation(txtStart.getText().toString(), RestaurantDetailActivity.this);
+        double distance = g.Calculate(t.getLatitude(), t.getLongitude(), HomeActivity.mLastLocation.getLatitude(), HomeActivity.mLastLocation.getLongitude());
+        txtKhoangcach.setText(String.valueOf(distance)+"km");
         txtLoaiHinh.setText(dataRes.getString(5));
         Cursor dataFood = database.GetData("SELECT price FROM Food WHERE res_id = " + res_id);
         int small = 999999999;
@@ -275,13 +266,13 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
 
     @Override
     public void onLocationChanged(Location location) {
-        LatLng temp = getLocationFromAddress(this, txtStart.getText().toString());
-        float results[] = new float[10];
-        Location.distanceBetween(location.getLatitude(),
-                location.getLongitude(),
-                temp.latitude,
-                temp.longitude, results);
-        txtKhoangcach.setText(String.valueOf(results[0]));
+//        LatLng temp = getLocationFromAddress(this, txtStart.getText().toString());
+//        float results[] = new float[10];
+//        Location.distanceBetween(location.getLatitude(),
+//                location.getLongitude(),
+//                temp.latitude,
+//                temp.longitude, results);
+        //txtKhoangcach.setText(String.valueOf(results[0]));
     }
 
     @Override

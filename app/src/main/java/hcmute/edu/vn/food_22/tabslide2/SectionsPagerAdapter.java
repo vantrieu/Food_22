@@ -1,5 +1,8 @@
 package hcmute.edu.vn.food_22.tabslide2;
 
+import android.location.Location;
+import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -18,7 +21,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
     String text_input_by_user;
     int province_id;
 
-    public SectionsPagerAdapter(ShowKQTimKiem context,String p_input, int p_provin_id, FragmentManager fm) {
+    public SectionsPagerAdapter(ShowKQTimKiem context, String p_input, int p_provin_id, FragmentManager fm) {
         super(fm);
         mContext = context;
         text_input_by_user=p_input;
