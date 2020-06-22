@@ -4,24 +4,20 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import hcmute.edu.vn.food_22.Database;
 import hcmute.edu.vn.food_22.GeocodingLocation;
-import hcmute.edu.vn.food_22.HomeActivity;
+import hcmute.edu.vn.food_22.MainActivity;
 import hcmute.edu.vn.food_22.R;
 import hcmute.edu.vn.food_22.RestaurantDetailActivity;
 import hcmute.edu.vn.food_22.ShowKQAdapter;
@@ -39,6 +35,7 @@ public class PlaceholderFragment extends Fragment
     public static int province_id;
     private PageViewModel pageViewModel;
     List<Store> arrayList;
+    List<Store> arrayList2;
 
     public static PlaceholderFragment newInstance(int index) {
         PlaceholderFragment fragment = new PlaceholderFragment();
@@ -99,11 +96,11 @@ public class PlaceholderFragment extends Fragment
         return rootView;
     }
 
-    // Dựa vào điều kiện truyền vào để nạp dữ liệu cho listview
-    private void loadDATA(int choose)
+    private void loadDATA(int tab)
     {
-        arrayList=new ArrayList<>();
-        showKQAdapter=new ShowKQAdapter(context,R.layout.ketqua_timkiem_item,arrayList);
+        arrayList = new ArrayList<>();
+        arrayList2 = new ArrayList<>();
+
         Cursor cursor=get_by_food(text_input_by_user,province_id);
         if(cursor.getCount()<1)
         {
@@ -113,26 +110,50 @@ public class PlaceholderFragment extends Fragment
                 Toast.makeText(context, "Không tìm thấy kết quả phù hợp", Toast.LENGTH_SHORT).show();
             }
         }
-        while (cursor.moveToNext())
+        if (tab==2)
         {
-            GeocodingLocation g = new GeocodingLocation();
-            Location temp = g.getAddressFromLocation(cursor.getString(3),context);
-            double distance = g.Calculate(temp.getLatitude(), temp.getLongitude(), HomeActivity.mLastLocation.getLatitude(), HomeActivity.mLastLocation.getLongitude());
-
-            arrayList.add(new Store(cursor.getInt(0),
-                    cursor.getString(1),
-                    cursor.getString(2),
-                    cursor.getString(3),
-                    distance,
-                    cursor.getString(4),
-                    cursor.getString(5),
-                    null,
-                    null,
-                    cursor.getInt(6),
-                    cursor.getInt(7),
-                    cursor.getInt(8)));
+            while (cursor.moveToNext()) {
+                GeocodingLocation g = new GeocodingLocation();
+                Location temp = g.getAddressFromLocation(cursor.getString(3), context);
+                double distance = g.Calculate(temp.getLatitude(), temp.getLongitude(), MainActivity.mLastLocation.getLatitude(), MainActivity.mLastLocation.getLongitude());
+                if (distance < 3) {
+                    arrayList2.add(new Store(cursor.getInt(0),
+                            cursor.getString(1),
+                            cursor.getString(2),
+                            cursor.getString(3),
+                            distance,
+                            cursor.getString(4),
+                            cursor.getString(5),
+                            null,
+                            null,
+                            cursor.getInt(6),
+                            cursor.getInt(7),
+                            cursor.getInt(8)));
+                }
+            }
+            showKQAdapter = new ShowKQAdapter(context,R.layout.ketqua_timkiem_item,arrayList2);
         }
-        showKQAdapter.notifyDataSetChanged();
+        else
+        {
+            while (cursor.moveToNext()) {
+                GeocodingLocation g = new GeocodingLocation();
+                Location temp = g.getAddressFromLocation(cursor.getString(3), context);
+                double distance = g.Calculate(temp.getLatitude(), temp.getLongitude(), MainActivity.mLastLocation.getLatitude(), MainActivity.mLastLocation.getLongitude());
+                arrayList.add(new Store(cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        distance,
+                        cursor.getString(4),
+                        cursor.getString(5),
+                        null,
+                        null,
+                        cursor.getInt(6),
+                        cursor.getInt(7),
+                        cursor.getInt(8)));
+            }
+            showKQAdapter = new ShowKQAdapter(context,R.layout.ketqua_timkiem_item,arrayList);
+        }
     }
     private Cursor get_by_name(String name, int province)
     {

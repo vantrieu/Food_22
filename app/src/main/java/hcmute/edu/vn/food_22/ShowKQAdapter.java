@@ -72,7 +72,9 @@ public class ShowKQAdapter extends BaseAdapter {
         final Store infoQuan=dsQuan.get(position);
         holder.tenQuan.setText(infoQuan.getRes_name());
         holder.diaChi.setText(infoQuan.getRes_address());
-        holder.khoangCach.setText(String.valueOf((int)infoQuan.getDistance())+" km");
+        if(MainActivity.isEnableGPS&&MainActivity.isConnect)
+            holder.khoangCach.setText(String.valueOf((int)infoQuan.getDistance())+ String.valueOf(((infoQuan.getDistance()-(int)infoQuan.getDistance()))).substring(1,3) +" km");
+        else holder.khoangCach.setText("(undefine)");
         holder.loaiHinh.setText(infoQuan.getTes_type());
         Picasso.with(context).load(infoQuan.getUrl()).into(holder.img_info);
         return convertView;

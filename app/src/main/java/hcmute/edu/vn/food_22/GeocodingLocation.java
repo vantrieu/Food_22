@@ -33,9 +33,10 @@ public class GeocodingLocation
                 Address address = addressList.get(0);
                 l.setLatitude(address.getLatitude());
                 l.setLongitude(address.getLongitude());
+                MainActivity.isConnect = true;
             }
         } catch (IOException e) {
-            Log.e(TAG, "Unable to connect to Geocoder", e);
+            MainActivity.isConnect = false;
         }
         return l;
     }

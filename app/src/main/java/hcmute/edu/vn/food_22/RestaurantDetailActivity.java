@@ -185,8 +185,8 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
         txtGio.setText(temp);
         txtStart.setText(dataRes.getString(4));
         Location t = g.getAddressFromLocation(txtStart.getText().toString(), RestaurantDetailActivity.this);
-        double distance = g.Calculate(t.getLatitude(), t.getLongitude(), HomeActivity.mLastLocation.getLatitude(), HomeActivity.mLastLocation.getLongitude());
-        txtKhoangcach.setText(String.valueOf(distance)+"km");
+        double distance = g.Calculate(t.getLatitude(), t.getLongitude(), MainActivity.mLastLocation.getLatitude(), MainActivity.mLastLocation.getLongitude());
+        txtKhoangcach.setText(String.valueOf((int) distance) + String.valueOf(((distance - (int) distance))).substring(1, 3) + " km");
         txtLoaiHinh.setText(dataRes.getString(5));
         Cursor dataFood = database.GetData("SELECT price FROM Food WHERE res_id = " + res_id);
         int small = 999999999;
@@ -232,19 +232,25 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
     @Override
     public void onMapReady(GoogleMap googleMap) {
         LatLng temp = getLocationFromAddress(this, txtStart.getText().toString());
-        googleMap.addMarker(new MarkerOptions().position(temp).title(txtTenQuan.getText().toString()));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(temp, 12));
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
+        try {
+            googleMap.addMarker(new MarkerOptions().position(temp).title(txtTenQuan.getText().toString()));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(temp, 12));
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            googleMap.setMyLocationEnabled(true);
         }
-        googleMap.setMyLocationEnabled(true);
+        catch (IllegalArgumentException e)
+        {
+            Toast.makeText(this, "Vui lòng kết nối internet", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public LatLng getLocationFromAddress(Context context,String strAddress) {
