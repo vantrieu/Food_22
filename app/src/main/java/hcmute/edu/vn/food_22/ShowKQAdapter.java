@@ -6,15 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.squareup.picasso.Picasso;
-
 import java.util.List;
-
-import hcmute.edu.vn.food_22.tabslide2.PlaceholderFragment;
-import hcmute.edu.vn.food_22.tabslide2.SectionsPagerAdapter;
 
 public class ShowKQAdapter extends BaseAdapter {
 
@@ -72,7 +66,7 @@ public class ShowKQAdapter extends BaseAdapter {
         final Store infoQuan=dsQuan.get(position);
         holder.tenQuan.setText(infoQuan.getRes_name());
         holder.diaChi.setText(infoQuan.getRes_address());
-        if(MainActivity.isEnableGPS&&MainActivity.isConnect)
+        if(MainActivity.isGPSEnabled&&MainActivity.isWifiEnabled)
             holder.khoangCach.setText(String.valueOf((int)infoQuan.getDistance())+ String.valueOf(((infoQuan.getDistance()-(int)infoQuan.getDistance()))).substring(1,3) +" km");
         else holder.khoangCach.setText("(undefine)");
         holder.loaiHinh.setText(infoQuan.getTes_type());

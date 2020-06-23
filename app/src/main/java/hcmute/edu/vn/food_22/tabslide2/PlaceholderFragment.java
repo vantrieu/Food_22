@@ -29,7 +29,7 @@ import static hcmute.edu.vn.food_22.ShowKQTimKiem.resourceIds;
 public class PlaceholderFragment extends Fragment
 {
     private static final String ARG_SECTION_NUMBER = "section_number";
-    public static ShowKQAdapter showKQAdapter;
+    public ShowKQAdapter showKQAdapter;
     public static ShowKQTimKiem context;
     public static String text_input_by_user;
     public static int province_id;
@@ -116,7 +116,7 @@ public class PlaceholderFragment extends Fragment
                 GeocodingLocation g = new GeocodingLocation();
                 Location temp = g.getAddressFromLocation(cursor.getString(3), context);
                 double distance = g.Calculate(temp.getLatitude(), temp.getLongitude(), MainActivity.mLastLocation.getLatitude(), MainActivity.mLastLocation.getLongitude());
-                if (distance < 3) {
+                if (MainActivity.isGPSEnabled &&distance < 3) {
                     arrayList2.add(new Store(cursor.getInt(0),
                             cursor.getString(1),
                             cursor.getString(2),

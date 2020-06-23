@@ -1,16 +1,27 @@
 package hcmute.edu.vn.food_22;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +64,7 @@ public class HomeActivity extends AppCompatActivity {
                     Intent i = new Intent(HomeActivity.this, ShowKQTimKiem.class);
                     i.putExtra("key",edt_address.getText().toString().trim());
                     i.putExtra("province_id", province_id);
-                    i.putExtra("province_name",txtAddress.getText()); //phải có province_id khi chương trình chạy, lúc chưa chọn tỉnh
+                    i.putExtra("province_name",txtAddress.getText());
                     i.putExtra("input",edt_address.getText().toString().trim());
                     startActivity(i);
                     return true;
@@ -68,7 +79,36 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MainActivity.UpdateLocation();
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(
+                    HomeActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    1
+            );
+        }
+        else {
+            final LocationRequest locationRequest=new LocationRequest();
+            locationRequest.setInterval(10000);
+            locationRequest.setFastestInterval(3000);
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            LocationServices.getFusedLocationProviderClient(HomeActivity.this)
+                    .requestLocationUpdates(locationRequest,new LocationCallback(){
+                        @Override
+                        public void onLocationResult(LocationResult locationResult) {
+                            super.onLocationResult(locationResult);
+                            LocationServices.getFusedLocationProviderClient(HomeActivity.this)
+                                    .removeLocationUpdates(this);
+                            if(locationResult!=null&&locationResult.getLocations().size()>0)
+                            {
+                                int latestLocationIndex=locationResult.getLocations().size()-1;
+                                MainActivity.mLastLocation.setLatitude(locationResult.getLocations().get(latestLocationIndex).getLatitude());
+                                MainActivity.mLastLocation.setLongitude(locationResult.getLocations().get(latestLocationIndex).getLongitude());
+                            }
+                        }
+                    }, Looper.getMainLooper());
+        }
     }
 
     @Override

@@ -17,7 +17,6 @@ import static hcmute.edu.vn.food_22.ShowKQTimKiem.tabs;
 public class SectionsPagerAdapter extends FragmentPagerAdapter
 {
     private final ShowKQTimKiem mContext;
-    ShowKQAdapter adapter;
     String text_input_by_user;
     int province_id;
 
@@ -26,7 +25,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
         mContext = context;
         text_input_by_user=p_input;
         province_id=p_provin_id;
-        PlaceholderFragment.showKQAdapter=adapter;
         PlaceholderFragment.context=mContext;
         PlaceholderFragment.text_input_by_user=text_input_by_user;
         PlaceholderFragment.province_id=province_id;

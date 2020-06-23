@@ -4,11 +4,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.os.Bundle;
-
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,20 +21,20 @@ public class GeocodingLocation
 
     public Location getAddressFromLocation(String locationAddress,
                                         Context context) {
-        Location l=new Location("ABC");
+        Location location=new Location("ABC");
         Geocoder g = new Geocoder(context, Locale.getDefault());
         try {
             List<Address> addressList = g.getFromLocationName(locationAddress, 1);
             if (addressList != null && addressList.size() > 0) {
                 Address address = addressList.get(0);
-                l.setLatitude(address.getLatitude());
-                l.setLongitude(address.getLongitude());
-                MainActivity.isConnect = true;
+                location.setLatitude(address.getLatitude());
+                location.setLongitude(address.getLongitude());
+                MainActivity.isWifiEnabled = true;
             }
         } catch (IOException e) {
-            MainActivity.isConnect = false;
+            MainActivity.isWifiEnabled = false;
         }
-        return l;
+        return location;
     }
     public double Calculate(double s1, double s2, double e1, double e2)
     {

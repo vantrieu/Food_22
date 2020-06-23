@@ -1,27 +1,17 @@
 package hcmute.edu.vn.food_22;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
-
 import android.content.Intent;
 import android.database.Cursor;
-import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
-
-import java.util.ArrayList;
-
 import hcmute.edu.vn.food_22.tabslide2.SectionsPagerAdapter;
 
 public class ShowKQTimKiem extends AppCompatActivity {
@@ -76,9 +66,9 @@ public class ShowKQTimKiem extends AppCompatActivity {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER))
                 {
-                sectionsPagerAdapter = new SectionsPagerAdapter(ShowKQTimKiem.this,edt_find.getText().toString(),province_id, getSupportFragmentManager());
-                mViewPager.setAdapter(sectionsPagerAdapter);
-                tabLayout.setupWithViewPager(mViewPager);
+                    sectionsPagerAdapter = new SectionsPagerAdapter(ShowKQTimKiem.this,edt_find.getText().toString(),province_id, getSupportFragmentManager());
+                    mViewPager.setAdapter(sectionsPagerAdapter);
+                    tabLayout.setupWithViewPager(mViewPager);
                 return true;
                 }
                 return false;

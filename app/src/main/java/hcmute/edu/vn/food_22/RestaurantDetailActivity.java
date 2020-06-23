@@ -1,15 +1,7 @@
 package hcmute.edu.vn.food_22;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
 import android.app.Dialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,8 +10,6 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.format.Time;
@@ -29,33 +19,29 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RestaurantDetailActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
+public class RestaurantDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
     private RecyclerView recyclerView;
     private ImageView img_back;
     private TextView txtTenQuan, txtTinh, txtTrangThai, txtGio, txtStart,
             txtKhoangcach, txtLoaiHinh, txtGia, txtAddWifi, txtWifi, txtMenu;
-    private Button btnLienHe;
+
     private int res_id;
     private Database database = new Database(this, "foody.db", null, 1);
-    protected LocationManager locationManager;
-    protected LocationListener locationListener;
-    protected boolean gps_enabled, network_enabled;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,7 +172,9 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
         txtStart.setText(dataRes.getString(4));
         Location t = g.getAddressFromLocation(txtStart.getText().toString(), RestaurantDetailActivity.this);
         double distance = g.Calculate(t.getLatitude(), t.getLongitude(), MainActivity.mLastLocation.getLatitude(), MainActivity.mLastLocation.getLongitude());
-        txtKhoangcach.setText(String.valueOf((int) distance) + String.valueOf(((distance - (int) distance))).substring(1, 3) + " km");
+        if(MainActivity.isGPSEnabled&&MainActivity.isWifiEnabled)
+            txtKhoangcach.setText(String.valueOf((int) distance) + String.valueOf(((distance - (int) distance))).substring(1, 3) + " km");
+        else txtKhoangcach.setText("(undefine)");
         txtLoaiHinh.setText(dataRes.getString(5));
         Cursor dataFood = database.GetData("SELECT price FROM Food WHERE res_id = " + res_id);
         int small = 999999999;
@@ -236,14 +224,11 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
             googleMap.addMarker(new MarkerOptions().position(temp).title(txtTenQuan.getText().toString()));
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(temp, 12));
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
+                ActivityCompat.requestPermissions(
+                        RestaurantDetailActivity.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        1
+                );
             }
             googleMap.setMyLocationEnabled(true);
         }
@@ -268,31 +253,5 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
             ex.printStackTrace();
         }
         return p1;
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-//        LatLng temp = getLocationFromAddress(this, txtStart.getText().toString());
-//        float results[] = new float[10];
-//        Location.distanceBetween(location.getLatitude(),
-//                location.getLongitude(),
-//                temp.latitude,
-//                temp.longitude, results);
-        //txtKhoangcach.setText(String.valueOf(results[0]));
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
     }
 }
