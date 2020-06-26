@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.format.Time;
@@ -141,7 +142,32 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
             public void onClick(View v) {
                 final Dialog dialog = new Dialog(RestaurantDetailActivity.this);
                 dialog.setContentView(R.layout.lien_he);
+                final TextView txtSdt = (TextView) dialog.findViewById(R.id.txtSdt);
+                final TextView txtErr = (TextView) dialog.findViewById(R.id.txtError);
+                if(phone.length() > 0)
+                    txtSdt.setText(phone);
+                else
+                    txtSdt.setText("Không có số điện thoại!");
                 dialog.show();
+
+                txtSdt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(phone.length() > 0)
+                            startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null)));
+                        else
+                            Toast.makeText(RestaurantDetailActivity.this, "Nhà hàng không sử dụng điện thoại!", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                });
+
+                txtErr.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(RestaurantDetailActivity.this, "Báo cáo của bạn đã được lưu lại!", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                });
             }
         });
     }
@@ -235,7 +261,8 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
         try {
             googleMap.addMarker(new MarkerOptions().position(temp).title(txtTenQuan.getText().toString()));
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(temp, 12));
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(
                         RestaurantDetailActivity.this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},

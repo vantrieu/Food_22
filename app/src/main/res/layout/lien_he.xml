@@ -23,7 +23,8 @@
         android:textSize="18sp"
         android:gravity="center_horizontal"
         android:text="SĐT"
-        android:textColor="#028C08"/>
+        android:textColor="#028C08"
+        android:clickable="true"/>
 
     <TextView
         android:id="@+id/txtError"
@@ -37,7 +38,8 @@
         android:layout_marginLeft="-2dp"
         android:layout_marginRight="-2dp"
         android:layout_marginBottom="-2dp"
-        android:padding="5dp"/>
+        android:padding="5dp"
+        android:clickable="true"/>
 
 
 </LinearLayout>

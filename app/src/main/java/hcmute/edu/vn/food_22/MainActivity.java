@@ -72,12 +72,12 @@ public class MainActivity extends AppCompatActivity {
                 {
                     switch (event) {
                         case GPS_EVENT_STARTED:
-                            Toast.makeText(MainActivity.this, "GPS ON", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(MainActivity.this, "GPS ON", Toast.LENGTH_SHORT).show();
                             getCurrentLocation();
                             isGPSEnabled = true;
                             break;
                         case GPS_EVENT_STOPPED:
-                            Toast.makeText(MainActivity.this, "GPS stopped", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(MainActivity.this, "GPS stopped", Toast.LENGTH_SHORT).show();
                             break;
                     }
                 }
