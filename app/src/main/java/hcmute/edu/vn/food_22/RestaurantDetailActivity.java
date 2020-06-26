@@ -38,8 +38,9 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
     private ImageView img_back;
     private TextView txtTenQuan, txtTinh, txtTrangThai, txtGio, txtStart,
             txtKhoangcach, txtLoaiHinh, txtGia, txtAddWifi, txtWifi, txtMenu;
-
+    private String phone;
     private int res_id;
+    private Button btnLienhe;
     private Database database = new Database(this, "foody.db", null, 1);
 
 
@@ -62,6 +63,7 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
         txtWifi = (TextView) findViewById(R.id.txtWifi);
         txtMenu = (TextView) findViewById(R.id.txtMenu);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview_img);
+        btnLienhe = (Button) findViewById(R.id.btnLienHe);
 
         Intent intent = getIntent();
         res_id = intent.getIntExtra("res_id", 0);
@@ -133,6 +135,15 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.MyMap);
         mapFragment.getMapAsync(this);
+
+        btnLienhe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(RestaurantDetailActivity.this);
+                dialog.setContentView(R.layout.lien_he);
+                dialog.show();
+            }
+        });
     }
 
     private void GetImage() {
@@ -159,7 +170,7 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
 
     private void GetRestaurant() {
         GeocodingLocation g = new GeocodingLocation();
-        Cursor dataRes = database.GetData("SELECT Province.name, res_name, res_open, res_close, res_address, res_type FROM Province INNER JOIN " +
+        Cursor dataRes = database.GetData("SELECT Province.name, res_name, res_open, res_close, res_address, res_type, phone_number FROM Province INNER JOIN " +
                 "Restaurant ON Province.province_id = Restaurant.province_id WHERE Restaurant.res_id = " + res_id);
         dataRes.moveToFirst();
         txtTenQuan.setText(dataRes.getString(1));
@@ -186,6 +197,7 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
                 big = dataFood.getInt(0);
         }
         txtGia.setText(ConvertString(small) + " - " + ConvertString(big));
+        phone = dataRes.getString(6);
     }
 
     private String CheckStatus(String flag1, String flag2) {
