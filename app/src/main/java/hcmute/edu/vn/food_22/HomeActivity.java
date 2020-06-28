@@ -10,6 +10,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -74,43 +76,8 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         SetupListStore();
+        Toast.makeText(this, ""+MainActivity.isWifiEnabled, Toast.LENGTH_SHORT).show();
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(
-                    HomeActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    1
-            );
-        }
-        else {
-            final LocationRequest locationRequest=new LocationRequest();
-            locationRequest.setInterval(10000);
-            locationRequest.setFastestInterval(3000);
-            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            LocationServices.getFusedLocationProviderClient(HomeActivity.this)
-                    .requestLocationUpdates(locationRequest,new LocationCallback(){
-                        @Override
-                        public void onLocationResult(LocationResult locationResult) {
-                            super.onLocationResult(locationResult);
-                            LocationServices.getFusedLocationProviderClient(HomeActivity.this)
-                                    .removeLocationUpdates(this);
-                            if(locationResult!=null&&locationResult.getLocations().size()>0)
-                            {
-                                int latestLocationIndex=locationResult.getLocations().size()-1;
-                                MainActivity.mLastLocation.setLatitude(locationResult.getLocations().get(latestLocationIndex).getLatitude());
-                                MainActivity.mLastLocation.setLongitude(locationResult.getLocations().get(latestLocationIndex).getLongitude());
-                            }
-                        }
-                    }, Looper.getMainLooper());
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

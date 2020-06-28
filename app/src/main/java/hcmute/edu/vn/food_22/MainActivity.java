@@ -17,6 +17,7 @@ import android.os.Looper;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -54,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
         database.CreateTableFood();
         database.CreateTableWifi();
         mLastLocation = new Location("ABC");
-        getCurrentLocation();
 
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        //LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                     MainActivity.this,
@@ -66,24 +67,27 @@ public class MainActivity extends AppCompatActivity {
         }
         else
         {
-            lm.addGpsStatusListener(new android.location.GpsStatus.Listener()
-            {
-                public void onGpsStatusChanged(int event)
-                {
-                    switch (event) {
-                        case GPS_EVENT_STARTED:
-                            //Toast.makeText(MainActivity.this, "GPS ON", Toast.LENGTH_SHORT).show();
-                            getCurrentLocation();
-                            isGPSEnabled = true;
-                            break;
-                        case GPS_EVENT_STOPPED:
-                            //Toast.makeText(MainActivity.this, "GPS stopped", Toast.LENGTH_SHORT).show();
-                            break;
-                    }
-                }
-            });
+            getCurrentLocation();
+//            lm.addGpsStatusListener(new android.location.GpsStatus.Listener()
+//            {
+//                public void onGpsStatusChanged(int event)
+//                {
+//                    switch (event) {
+//                        case GPS_EVENT_STARTED:
+//                            //Toast.makeText(MainActivity.this, "GPS ON", Toast.LENGTH_SHORT).show();
+//                            //getCurrentLocation();
+//                            break;
+//                        case GPS_EVENT_STOPPED:
+//                            //Toast.makeText(MainActivity.this, "GPS stopped", Toast.LENGTH_SHORT).show();
+//                            break;
+//                        default:
+//                            getCurrentLocation();
+//                            Toast.makeText(MainActivity.this, ""+MainActivity.mLastLocation.getLatitude(), Toast.LENGTH_SHORT).show();
+//                            break;
+//                    }
+//                }
+//            });
         }
-
         try {
             PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             txtVersion.setText("Phiên bản: " + packageInfo.versionName);
@@ -95,24 +99,16 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                     startActivity(intent);
                 }
-            }, 3000);
+            }, 5000);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
 
     }
+
+    @SuppressLint("MissingPermission")
     private void getCurrentLocation()
     {
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(
-                    MainActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    1
-            );
-        }
-        else {
             final LocationRequest locationRequest=new LocationRequest();
             locationRequest.setInterval(10000);
             locationRequest.setFastestInterval(3000);
@@ -129,9 +125,24 @@ public class MainActivity extends AppCompatActivity {
                                 int latestLocationIndex=locationResult.getLocations().size()-1;
                                 mLastLocation.setLatitude(locationResult.getLocations().get(latestLocationIndex).getLatitude());
                                 mLastLocation.setLongitude(locationResult.getLocations().get(latestLocationIndex).getLongitude());
+                                isGPSEnabled = true;
                             }
                         }
                     }, Looper.getMainLooper());
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==1&&grantResults.length>0)
+        {
+            if(grantResults[0]==PackageManager.PERMISSION_GRANTED)
+            {
+                getCurrentLocation();
+            }
+            else
+            {
+                Toast.makeText(this, "Access denied", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

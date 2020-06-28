@@ -20,6 +20,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -207,7 +209,7 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
         String temp = dataRes.getString(2) + " - " + dataRes.getString(3);
         txtGio.setText(temp);
         txtStart.setText(dataRes.getString(4));
-        Location t = g.getAddressFromLocation(txtStart.getText().toString(), RestaurantDetailActivity.this);
+        Location t = g.getLatLngFromAddress(txtStart.getText().toString(), RestaurantDetailActivity.this);
         double distance = g.Calculate(t.getLatitude(), t.getLongitude(), MainActivity.mLastLocation.getLatitude(), MainActivity.mLastLocation.getLongitude());
         if(MainActivity.isGPSEnabled&&MainActivity.isWifiEnabled)
             txtKhoangcach.setText(String.valueOf((int) distance) + String.valueOf(((distance - (int) distance))).substring(1, 3) + " km");
@@ -276,7 +278,6 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
             Toast.makeText(this, "Vui lòng kết nối internet", Toast.LENGTH_SHORT).show();
         }
     }
-
     public LatLng getLocationFromAddress(Context context,String strAddress) {
         Geocoder coder = new Geocoder(context);
         List<Address> address;

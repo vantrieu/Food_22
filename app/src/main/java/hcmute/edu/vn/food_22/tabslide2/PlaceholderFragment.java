@@ -114,7 +114,7 @@ public class PlaceholderFragment extends Fragment
         {
             while (cursor.moveToNext()) {
                 GeocodingLocation g = new GeocodingLocation();
-                Location temp = g.getAddressFromLocation(cursor.getString(3), context);
+                Location temp = g.getLatLngFromAddress(cursor.getString(3), context);
                 double distance = g.Calculate(temp.getLatitude(), temp.getLongitude(), MainActivity.mLastLocation.getLatitude(), MainActivity.mLastLocation.getLongitude());
                 if (MainActivity.isGPSEnabled &&distance < 3) {
                     arrayList2.add(new Store(cursor.getInt(0),
@@ -137,7 +137,7 @@ public class PlaceholderFragment extends Fragment
         {
             while (cursor.moveToNext()) {
                 GeocodingLocation g = new GeocodingLocation();
-                Location temp = g.getAddressFromLocation(cursor.getString(3), context);
+                Location temp = g.getLatLngFromAddress(cursor.getString(3), context);
                 double distance = g.Calculate(temp.getLatitude(), temp.getLongitude(), MainActivity.mLastLocation.getLatitude(), MainActivity.mLastLocation.getLongitude());
                 arrayList.add(new Store(cursor.getInt(0),
                         cursor.getString(1),

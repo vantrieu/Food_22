@@ -19,8 +19,8 @@ public class GeocodingLocation
 
     }
 
-    public Location getAddressFromLocation(String locationAddress,
-                                        Context context) {
+    public Location getLatLngFromAddress(String locationAddress,
+                                         Context context) {
         Location location=new Location("ABC");
         Geocoder g = new Geocoder(context, Locale.getDefault());
         try {
