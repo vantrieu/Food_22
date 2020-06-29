@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     public static boolean isWifiEnabled;
     public static boolean isGPSEnabled;
     public static Location mLastLocation;
+    private static final int REQUEST_CODE = 123;
 
 
     @Override
@@ -97,13 +99,35 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent, REQUEST_CODE);
                 }
-            }, 5000);
+            }, 3000);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUEST_CODE){
+            try {
+                PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                txtVersion.setText("Phiên bản: " + packageInfo.versionName);
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                        startActivityForResult(intent, REQUEST_CODE);
+                    }
+                }, 2000);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @SuppressLint("MissingPermission")
