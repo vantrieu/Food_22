@@ -38,7 +38,7 @@ import java.util.List;
 
 public class RestaurantDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
     private RecyclerView recyclerView;
-    private ImageView img_back;
+    private ImageView img_back, imgWifi, imgDelivery;
     private TextView txtTenQuan, txtTinh, txtTrangThai, txtGio, txtStart,
             txtKhoangcach, txtLoaiHinh, txtGia, txtAddWifi, txtWifi, txtMenu;
     private String phone;
@@ -67,6 +67,8 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
         txtMenu = (TextView) findViewById(R.id.txtMenu);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview_img);
         btnLienhe = (Button) findViewById(R.id.btnLienHe);
+        imgWifi = (ImageView) findViewById(R.id.imgWifi);
+        imgDelivery = (ImageView) findViewById(R.id.imgDelivery);
 
         Intent intent = getIntent();
         res_id = intent.getIntExtra("res_id", 0);
@@ -103,15 +105,30 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
                     @Override
                     public void onClick(View v) {
                         dataWifi.moveToFirst();
-                        if (!edt_wifi.getText().equals(dataWifi.getString(1)) || !edt_pass.getText().equals(dataWifi.getString(2))) {
-                            database.QueryData("UPDATE Wifi SET wifi_name = '" + edt_wifi.getText() + "', wifi_pass = '" + edt_pass.getText() +
-                                    "' WHERE wifi_id = " + dataWifi.getInt(0));
+                        if(dataWifi.getCount() == 0){
+                            if (!edt_wifi.getText().equals("") || !edt_pass.getText().equals("")) {
+                                String sql = "INSERT INTO Wifi VALUES(null, '" + edt_wifi.getText().toString() + "', '" + edt_pass.getText().toString()
+                                        + "', " + res_id + ")";
+                                database.QueryData(sql);
+                            }
+                            Cursor dataWifi = database.GetData("SELECT wifi_id, wifi_name, wifi_pass FROM Wifi WHERE Wifi.res_id = " + res_id);
+                            dataWifi.moveToFirst();
+                            txtAddWifi.setTextColor(Color.BLUE);
+                            txtAddWifi.setText(dataWifi.getString(1));
+                            txtWifi.setText(dataWifi.getString(2));
+                            imgWifi.setImageResource(R.drawable.wifi_gray);
+                        } else {
+                            if (!edt_wifi.getText().equals(dataWifi.getString(1)) || !edt_pass.getText().equals(dataWifi.getString(2))) {
+                                database.QueryData("UPDATE Wifi SET wifi_name = '" + edt_wifi.getText() + "', wifi_pass = '" + edt_pass.getText() +
+                                        "' WHERE wifi_id = " + dataWifi.getInt(0));
+                            }
+                            Cursor dataWifi = database.GetData("SELECT wifi_id, wifi_name, wifi_pass FROM Wifi WHERE Wifi.res_id = " + res_id);
+                            dataWifi.moveToFirst();
+                            txtAddWifi.setTextColor(Color.BLUE);
+                            txtAddWifi.setText(dataWifi.getString(1));
+                            txtWifi.setText(dataWifi.getString(2));
+                            imgWifi.setImageResource(R.drawable.gray_wifi_icon);
                         }
-                        Cursor dataWifi = database.GetData("SELECT wifi_id, wifi_name, wifi_pass FROM Wifi WHERE Wifi.res_id = " + res_id);
-                        dataWifi.moveToFirst();
-                        txtAddWifi.setTextColor(Color.BLUE);
-                        txtAddWifi.setText(dataWifi.getString(1));
-                        txtWifi.setText(dataWifi.getString(2));
                         dialog.dismiss();
                     }
                 });
@@ -121,8 +138,14 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
         txtWifi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
-                startActivity(intent);
+                Cursor dataWifi = database.GetData("SELECT wifi_id, wifi_name, wifi_pass FROM Wifi WHERE Wifi.res_id = " + res_id);
+                if(dataWifi.getCount() == 0){
+                    txtAddWifi.callOnClick();
+                } else {
+                    Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                    startActivity(intent);
+                }
+
             }
         });
 
@@ -190,15 +213,18 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
         Cursor dataWifi = database.GetData("SELECT wifi_id, wifi_name, wifi_pass FROM Wifi WHERE Wifi.res_id = " + res_id);
         dataWifi.moveToFirst();
         if (dataWifi.getCount() > 0) {
+            imgWifi.setImageResource(R.drawable.green_wifi_icon);
             txtAddWifi.setTextColor(Color.BLUE);
             txtAddWifi.setText(dataWifi.getString(1));
             txtWifi.setText(dataWifi.getString(2));
+        } else {
+            imgWifi.setImageResource(R.drawable.wifi_gray);
         }
     }
 
     private void GetRestaurant() {
         GeocodingLocation g = new GeocodingLocation();
-        Cursor dataRes = database.GetData("SELECT Province.name, res_name, res_open, res_close, res_address, res_type, phone_number FROM Province INNER JOIN " +
+        Cursor dataRes = database.GetData("SELECT Province.name, res_name, res_open, res_close, res_address, res_type, phone_number, has_delivery FROM Province INNER JOIN " +
                 "Restaurant ON Province.province_id = Restaurant.province_id WHERE Restaurant.res_id = " + res_id);
         dataRes.moveToFirst();
         txtTenQuan.setText(dataRes.getString(1));
@@ -226,6 +252,11 @@ public class RestaurantDetailActivity extends AppCompatActivity implements OnMap
         }
         txtGia.setText(ConvertString(small) + " - " + ConvertString(big));
         phone = dataRes.getString(6);
+        if(dataRes.getInt(7) == 0){
+            imgDelivery.setImageResource(R.drawable.delivery_gray);
+        } else {
+            imgDelivery.setImageResource(R.drawable.delivery_green);
+        }
     }
 
     private String CheckStatus(String flag1, String flag2) {

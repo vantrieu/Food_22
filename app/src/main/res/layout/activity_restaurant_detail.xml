@@ -273,17 +273,17 @@
 
             <ImageView
                 android:id="@+id/imgWifi"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="20dp"
                 android:layout_marginLeft="20dp"
-                android:background="@drawable/green_wifi_icon" />
+                android:layout_gravity="center_vertical"/>
 
             <ImageView
-                android:id="@+id/txtDelivery"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:id="@+id/imgDelivery"
+                android:layout_width="25dp"
+                android:layout_height="20dp"
                 android:layout_marginLeft="20dp"
-                android:background="@drawable/shipper_icon" />
+                android:layout_gravity="center_vertical"/>
         </LinearLayout>
 
         <View

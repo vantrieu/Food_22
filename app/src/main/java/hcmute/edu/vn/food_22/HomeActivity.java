@@ -31,6 +31,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private TextView txtAddress;
     private static final int REQUEST_CODE = 123;
+    private static final int REQUEST_CODE_1 = 456;
     private List<Store> lstStore;
     RecyclerView list_store_recyclerview;
     EditText edt_address;
@@ -68,7 +69,7 @@ public class HomeActivity extends AppCompatActivity {
                     i.putExtra("province_id", province_id);
                     i.putExtra("province_name",txtAddress.getText());
                     i.putExtra("input",edt_address.getText().toString().trim());
-                    startActivity(i);
+                    startActivityForResult(i, REQUEST_CODE_1);
                     return true;
                 }
                 return false;
@@ -76,7 +77,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         SetupListStore();
-        Toast.makeText(this, ""+MainActivity.isWifiEnabled, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, ""+MainActivity.isWifiEnabled, Toast.LENGTH_SHORT).show();
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -85,6 +86,9 @@ public class HomeActivity extends AppCompatActivity {
             province_id = data.getIntExtra("province_id", 0);
             txtAddress.setText(GetProvinceName(province_id));
         }
+        if(requestCode==REQUEST_CODE_1){
+            edt_address.setText("");
+        }
         SetupListStore();
     }
 
@@ -92,9 +96,9 @@ public class HomeActivity extends AppCompatActivity {
         lstStore = new ArrayList<>();
         Cursor dataFlag = database.GetData("SELECT * FROM Province WHERE name = '" + txtAddress.getText() + "'");
         dataFlag.moveToFirst();
-        Toast.makeText(this, String.valueOf(province_id), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, String.valueOf(province_id), Toast.LENGTH_SHORT).show();
         Cursor dataRestaurant = database.GetData("SELECT * FROM Restaurant WHERE province_id = " + dataFlag.getInt(0));
-        Toast.makeText(this, String.valueOf(dataRestaurant.getCount()), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, String.valueOf(dataRestaurant.getCount()), Toast.LENGTH_SHORT).show();
         while (dataRestaurant.moveToNext()) {
             lstStore.add( new Store(dataRestaurant.getInt(0), dataRestaurant.getString(1),  dataRestaurant.getString(2),dataRestaurant.getString(3), 0,
                     dataRestaurant.getString(4), dataRestaurant.getString(5), dataRestaurant.getString(6), dataRestaurant.getString(7),
