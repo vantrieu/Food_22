@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
-        android:background="#f4061c"
+        android:background="@color/colorFlashScreen"
         android:orientation="horizontal">
 
         <ImageView
@@ -49,7 +49,7 @@
             <Button
                 android:id="@+id/button_menu_image"
                 android:layout_width="0dp"
-                android:layout_height="35dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1.5"
                 android:background="@drawable/button_menu_normal"
                 android:text="Ảnh" />
@@ -57,7 +57,7 @@
             <Button
                 android:id="@+id/button_menu_text"
                 android:layout_width="0dp"
-                android:layout_height="35dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1.5"
                 android:background="@drawable/button_menu_active"
                 android:text="Thực đơn" />
