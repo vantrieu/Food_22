@@ -116,7 +116,7 @@ public class PlaceholderFragment extends Fragment
                 GeocodingLocation g = new GeocodingLocation();
                 Location temp = g.getLatLngFromAddress(cursor.getString(3), context);
                 double distance = g.Calculate(temp.getLatitude(), temp.getLongitude(), MainActivity.mLastLocation.getLatitude(), MainActivity.mLastLocation.getLongitude());
-                if (MainActivity.isGPSEnabled &&distance < 3) {
+                if (MainActivity.isGPSEnabled &&distance < 25) {
                     arrayList2.add(new Store(cursor.getInt(0),
                             cursor.getString(1),
                             cursor.getString(2),
@@ -131,6 +131,7 @@ public class PlaceholderFragment extends Fragment
                             cursor.getInt(8)));
                 }
             }
+
             showKQAdapter = new ShowKQAdapter(context,R.layout.ketqua_timkiem_item,arrayList2);
         }
         else

@@ -92,7 +92,9 @@ public class HomeActivity extends AppCompatActivity {
         lstStore = new ArrayList<>();
         Cursor dataFlag = database.GetData("SELECT * FROM Province WHERE name = '" + txtAddress.getText() + "'");
         dataFlag.moveToFirst();
+        Toast.makeText(this, String.valueOf(province_id), Toast.LENGTH_SHORT).show();
         Cursor dataRestaurant = database.GetData("SELECT * FROM Restaurant WHERE province_id = " + dataFlag.getInt(0));
+        Toast.makeText(this, String.valueOf(dataRestaurant.getCount()), Toast.LENGTH_SHORT).show();
         while (dataRestaurant.moveToNext()) {
             lstStore.add( new Store(dataRestaurant.getInt(0), dataRestaurant.getString(1),  dataRestaurant.getString(2),dataRestaurant.getString(3), 0,
                     dataRestaurant.getString(4), dataRestaurant.getString(5), dataRestaurant.getString(6), dataRestaurant.getString(7),
